@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "Solitaire Game Tests";
+}
+
+<div class="container">
+    <h1>Solitaire Game Engine Tests</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="btn-group" role="group">
+                <button id="testDataStructures" class="btn btn-primary">Test Data Structures</button>
+                <button id="testDeck" class="btn btn-success">Test Deck</button>
+                <button id="testGameEngine" class="btn btn-info">Test Game Engine</button>
+                <button id="testStockRecycling" class="btn btn-warning">Test Stock Recycling</button>
+                <button id="runAllTests" class="btn btn-danger">Run All Tests</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Test Results:</h3>
+            <div id="testResults" class="alert alert-info" style="white-space: pre-wrap; min-height: 400px; max-height: 600px; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <button id="clearResults" class="btn btn-secondary">Clear Results</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Test Data Structures
+            $('#testDataStructures').click(function() {
+                $('#testResults').html('Testing Data Structures...');
+
+                $.post('@Url.Action("TestDataStructures", "Test")', function(data) {
+                    if (data.success) {
+                        $('#testResults').html(data.results.join('\n'));
+                    } else {
+                        $('#testResults').html('❌ Error:\n' + data.error);
+                    }
+                }).fail(function() {
+                    $('#testResults').html('❌ Request failed');
+                });
+            });
+
+            // Test Deck
+            $('#testDeck').click(function() {
+                $('#testResults').html('Testing Deck...');
+
+                $.post('@Url.Action("TestDeck", "Test")', function(data) {
+                    if (data.success) {
+                        $('#testResults').html(data.results.join('\n'));
+                    } else {
+                        $('#testResults').html('❌ Error:\n' + data.error);
+                    }
+                }).fail(function() {
+                    $('#testResults').html('❌ Request failed');
+                });
+            });
+
+            // Test Game Engine
+            $('#testGameEngine').click(function() {
+                $('#testResults').html('Testing Game Engine...');
+
+                $.post('@Url.Action("TestGameEngine", "Test")', function(data) {
+                    if (data.success) {
+                        $('#testResults').html(data.results.join('\n'));
+                    } else {
+                        $('#testResults').html('❌ Error:\n' + data.error);
+                    }
+                }).fail(function() {
+                    $('#testResults').html('❌ Request failed');
+                });
+            });
+
+            // Test Stock Recycling
+            $('#testStockRecycling').click(function() {
+                $('#testResults').html('Testing Stock Recycling...');
+
+                $.post('@Url.Action("TestStockRecycling", "Test")', function(data) {
+                    if (data.success) {
+                        $('#testResults').html(data.results.join('\n'));
+                    } else {
+                        $('#testResults').html('❌ Error:\n' + data.error);
+                    }
+                }).fail(function() {
+                    $('#testResults').html('❌ Request failed');
+                });
+            });
+
+            // Run All Tests
+            $('#runAllTests').click(function() {
+                $('#testResults').html('Running All Tests... This may take a moment.');
+
+                $.post('@Url.Action("RunAllTests", "Test")', function(data) {
+                    if (data.success) {
+                        $('#testResults').html(data.results.join('\n'));
+                    } else {
+                        $('#testResults').html('❌ Error:\n' + data.error);
+                    }
+                }).fail(function() {
+                    $('#testResults').html('❌ Request failed');
+                });
+            });
+
+            // Clear Results
+            $('#clearResults').click(function() {
+                $('#testResults').html('');
+            });
+        });
+    </script>
+}

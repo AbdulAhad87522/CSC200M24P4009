@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Solitaire.styles.css" asp-append-version="true" />
+
+    <!-- Add this line to render Styles section -->
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <header>
@@ -25,6 +28,14 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <!-- Add Game link -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Index">Play Game</a>
+                        </li>
+                        <!-- Add Test link -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Test" asp-action="Index">Tests</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -41,9 +52,23 @@
             &copy; 2025 - Solitaire - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
+    <!-- Load jQuery and Bootstrap first -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Load your data structure scripts BEFORE the Scripts section -->
+    <script src="~/js/data-structures/linkedlist.js"></script>
+    <script src="~/js/data-structures/stack.js"></script>
+    <script src="~/js/data-structures/queue.js"></script>
+    <script src="~/js/models/Card.js"></script>
+    <script src="~/js/models/Deck.js"></script>
+    <script src="~/js/game.js"></script>
+
+    <!-- Load site.js -->
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Render Scripts section LAST -->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

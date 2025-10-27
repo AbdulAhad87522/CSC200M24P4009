@@ -1,6 +1,4 @@
-﻿namespace Solitaire.wwwroot.js
-{
-    class CustomStack {
+﻿    class CustomStack {
         constructor() {
             this.list = new linkedlist();  // Use YOUR linked list
         }
@@ -31,5 +29,3 @@
             return this.list.length;
         }
     }
-
-}

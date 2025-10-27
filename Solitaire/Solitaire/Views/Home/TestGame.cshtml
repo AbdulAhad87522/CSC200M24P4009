@@ -1,0 +1,224 @@
+﻿@{
+    ViewData["Title"] = "Test Solitaire Game";
+}
+
+<div class="container">
+    <h1>Test Solitaire Game Engine</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <button onclick="testDataStructures()" class="btn btn-primary">Test Data Structures</button>
+            <button onclick="testDeck()" class="btn btn-success">Test Deck</button>
+            <button onclick="testGameEngine()" class="btn btn-info">Test Game Engine</button>
+            <button onclick="runAllTests()" class="btn btn-warning">Run All Tests</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Test Results:</h3>
+            <div id="testResults" class="alert alert-info" style="white-space: pre-wrap;"></div>
+        </div>
+
+        <div class="col-md-6">
+            <h3>Game State:</h3>
+            <div id="gameState" class="alert alert-secondary" style="white-space: pre-wrap;"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Your existing JavaScript classes should be loaded here
+        // Make sure they are included in _Layout.cshtml or this view
+    </script>
+
+    <script>
+        let currentGame = null;
+        let testOutput = "";
+
+        function logTest(message) {
+            testOutput += message + "\n";
+            document.getElementById('testResults').innerText = testOutput;
+        }
+
+        function clearTestResults() {
+            testOutput = "";
+            document.getElementById('testResults').innerText = "";
+            document.getElementById('gameState').innerText = "";
+        }
+
+        function testDataStructures() {
+            clearTestResults();
+            logTest("=== TESTING DATA STRUCTURES ===");
+
+            try {
+                // Test Linked List
+                logTest("\n🔗 Testing Linked List:");
+                const ll = new linkedlist();
+                ll.push_front("First");
+                ll.push_back("Last");
+                ll.insert("Middle", 2);
+                logTest(`Linked List Length: ${ll.length}`);
+                logTest(`Head: ${ll.head.data}, Tail: ${ll.tail.data}`);
+
+                // Test Stack
+                logTest("\n📚 Testing Stack:");
+                const stack = new CustomStack();
+                stack.push("A");
+                stack.push("B");
+                logTest(`Stack Size: ${stack.size()}`);
+                logTest(`Stack Pop: ${stack.pop()}`);
+                logTest(`Stack Peek: ${stack.peek()}`);
+
+                // Test Queue
+                logTest("\n📥 Testing Queue:");
+                const queue = new CustomQueue();
+                queue.enqueue("First");
+                queue.enqueue("Second");
+                logTest(`Queue Size: ${queue.size()}`);
+                logTest(`Queue Dequeue: ${queue.dequeue()}`);
+                logTest(`Queue Front: ${queue.front()}`);
+
+                logTest("\n✅ All data structures working correctly!");
+            } catch (error) {
+                logTest(`❌ Error: ${error.message}`);
+            }
+        }
+
+        function testDeck() {
+            clearTestResults();
+            logTest("=== TESTING DECK ===");
+
+            try {
+                const deck = new Deck();
+                logTest(`Deck created with ${deck.size} cards`);
+
+                // Test drawing
+                const card1 = deck.drawCard();
+                logTest(`Drew card: ${card1.suit} ${card1.rank}`);
+                logTest(`Deck size after draw: ${deck.size}`);
+
+                // Test shuffle
+                deck.shuffle();
+                logTest("Deck shuffled successfully");
+
+                // Draw multiple cards
+                const cards = [];
+                for (let i = 0; i < 5; i++) {
+                    cards.push(deck.drawCard());
+                }
+                logTest(`Drew 5 cards, deck size: ${deck.size}`);
+                logTest("Drawn cards: " + cards.map(c => `${c.rank} of ${c.suit}`).join(", "));
+
+                logTest("\n✅ Deck working correctly!");
+            } catch (error) {
+                logTest(`❌ Error: ${error.message}`);
+            }
+        }
+
+        function testGameEngine() {
+            clearTestResults();
+            logTest("=== TESTING GAME ENGINE ===");
+
+            try {
+                currentGame = new GameEngine();
+                logTest("🎮 Game Engine Initialized!");
+
+                // Display initial state
+                displayGameState();
+
+                // Test drawing from stock
+                logTest("\n🔄 Testing Stock/Waste:");
+                currentGame.drawFromStock();
+                currentGame.drawFromStock();
+                logTest(`After 2 draws - Stock: ${currentGame.stock.size()}, Waste: ${currentGame.waste.size()}`);
+
+                // Display updated state
+                displayGameState();
+
+                logTest("\n✅ Game Engine working correctly!");
+            } catch (error) {
+                logTest(`❌ Error: ${error.message}`);
+                console.error(error);
+            }
+        }
+
+        function displayGameState() {
+            if (!currentGame) return;
+
+            let state = "🎴 CURRENT GAME STATE:\n\n";
+
+            // Stock & Waste
+            state += `Stock: ${currentGame.stock.size()} cards\n`;
+            const wasteTop = currentGame.waste.peek();
+            state += `Waste: ${currentGame.waste.size()} cards, Top: ${wasteTop ? wasteTop.suit + ' ' + wasteTop.rank : 'empty'}\n\n`;
+
+            // Foundations
+            state += "🏆 Foundations:\n";
+            Object.keys(currentGame.foundations).forEach(suit => {
+                const foundation = currentGame.foundations[suit];
+                const topCard = foundation.peek();
+                state += `  ${suit}: ${foundation.size()} cards, Top: ${topCard ? topCard.rank : 'empty'}\n`;
+            });
+            state += "\n";
+
+            // Tableau
+            state += "📋 Tableau:\n";
+            currentGame.tableau.forEach((column, index) => {
+                const cards = [];
+                let temp = column.head;
+                while(temp) {
+                    const card = temp.data;
+                    const display = card.isFaceUp ? `${getRankSymbol(card.rank)}${getSuitSymbol(card.suit)}` : '🂠';
+                    cards.push(display);
+                    temp = temp.next;
+                }
+                state += `  Column ${index}: ${cards.join(' ')}\n`;
+            });
+
+            document.getElementById('gameState').innerText = state;
+        }
+
+        function getRankSymbol(rank) {
+            const symbols = {1: 'A', 11: 'J', 12: 'Q', 13: 'K'};
+            return symbols[rank] || rank;
+        }
+
+        function getSuitSymbol(suit) {
+            const symbols = {hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠'};
+            return symbols[suit] || suit[0].toUpperCase();
+        }
+
+        function runAllTests() {
+            clearTestResults();
+            logTest("=== RUNNING ALL TESTS ===\n");
+
+            setTimeout(() => testDataStructures(), 100);
+            setTimeout(() => testDeck(), 500);
+            setTimeout(() => testGameEngine(), 1000);
+        }
+
+        // Additional test functions
+        function testStockRecycling() {
+            if (!currentGame) {
+                logTest("Please initialize game engine first!");
+                return;
+            }
+
+            logTest("\n🔄 Testing Stock Recycling:");
+
+            // Empty the stock
+            while(currentGame.stock.size() > 0) {
+                currentGame.drawFromStock();
+            }
+            logTest(`Stock emptied, Waste has ${currentGame.waste.size()} cards`);
+
+            // Trigger recycling
+            currentGame.drawFromStock();
+            logTest(`After recycling - Stock: ${currentGame.stock.size()}, Waste: ${currentGame.waste.size()}`);
+
+            displayGameState();
+        }
+    </script>
+}

@@ -1,743 +1,450 @@
-﻿@{
-    ViewData["Title"] = "Solitaire - Klondike";
+﻿@using System.Linq
+@using Solitaire.Models.models
+@model GameViewModel
+@{
+    ViewData["Title"] = "Solitaire";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
+<div class="container">
+    <h1>Solitaire</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <button id="newGame" class="btn btn-primary">New Game</button>
+            <button id="drawCard" class="btn btn-success">Draw Card</button>
+            <span id="gameStatus" class="ml-3"></span>
+        </div>
+    </div>
+
+    <!-- Stock and Waste -->
+    <div class="row mb-4">
+        <div class="col-md-2">
+            <div class="card-area">
+                <h5>Stock: @Model.StockCount</h5>
+                <div class="card-slot stock" onclick="drawFromStock()">
+                    @if (Model.StockCount > 0)
+                    {
+                        <div class="card back">🂠</div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card-area">
+                <h5>Waste</h5>
+                <div class="card-slot waste" onclick="selectWaste()">
+                    @if (Model.Waste.Count > 0)
+                    {
+                        var topCard = Model.Waste[Model.Waste.Count - 1];
+                        <div class="card front @topCard.Suit waste-card"
+                             data-rank="@topCard.Rank" data-suit="@topCard.Suit"
+                             onclick="selectWaste()">
+                            @GetRankSymbol(topCard.Rank)@GetSuitSymbol(topCard.Suit)
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card-area">
+                <h5>Foundations</h5>
+                <div class="foundations">
+                    @foreach (var foundation in Model.Foundations)
+                    {
+                        <div class="card-slot foundation" data-suit="@foundation.Key" onclick="moveToFoundation('@foundation.Key')">
+                            @if (foundation.Value.Count > 0)
+                            {
+                                var topCard = foundation.Value[foundation.Value.Count - 1];
+                                <div class="card front @topCard.Suit" data-rank="@topCard.Rank" data-suit="@topCard.Suit">
+                                    @GetRankSymbol(topCard.Rank)@GetSuitSymbol(topCard.Suit)
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="empty-foundation">@foundation.Key[0]</div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tableau -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tableau">
+                @for (int i = 0; i < Model.Tableau.Count; i++)
+                {
+                    <div class="tableau-column" data-column="@i" onclick="moveToTableau(@i)">
+                        @{
+                            var column = Model.Tableau[i];
+                            var cardIndex = 0;
+                        }
+                        @foreach (var card in column)
+                        {
+                            <div class="card @(card.IsFaceUp ? "front " + card.Suit : "back")"
+                                 data-rank="@card.Rank" data-suit="@card.Suit"
+                                 data-column="@i" data-index="@cardIndex"
+                                 onclick="handleCardClick(this, @i, @cardIndex, event)"
+                                 ondblclick="autoMoveToFoundation(this, @i, @cardIndex)">
+                                @if (card.IsFaceUp)
+                                {
+                                    @GetRankSymbol(card.Rank)
+
+                                    @GetSuitSymbol(card.Suit)
+                                }
+                                else
+                                {
+                                    @:🂠
+                                }
+                            </div>
+                            cardIndex++;
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(135deg, #1e7e34 0%, #0d5c24 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-        }
-
-        .game-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .game-header {
+        .card-slot {
+            width: 100px;
+            height: 140px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px 25px;
-            border-radius: 10px;
+            justify-content: center;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .game-title {
-            color: #fff;
-            font-size: 28px;
-            font-weight: bold;
+            .card-slot:hover {
+                border-color: #007bff;
+                background-color: rgba(0, 123, 255, 0.1);
+            }
+
+        .card {
+            width: 100px;
+            height: 140px;
+            border: 1px solid #000;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: -120px; /* Overlap cards */
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            z-index: 1;
         }
 
-        .game-controls {
+            .card:hover {
+                transform: translateY(-5px);
+                z-index: 10;
+            }
+
+            .card.selected {
+                box-shadow: 0 0 0 3px yellow;
+                transform: scale(1.05);
+                z-index: 20;
+            }
+
+            .card.back {
+                background: linear-gradient(45deg, #1a6a1a, #2d8a2d);
+                color: white;
+            }
+
+            .card.front {
+                background: white;
+                color: black;
+                box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            }
+
+        .hearts, .diamonds {
+            color: red;
+        }
+
+        .clubs, .spades {
+            color: black;
+        }
+
+        .tableau {
+            display: flex;
+            gap: 20px;
+        }
+
+        .tableau-column {
+            min-width: 100px;
+            padding-top: 20px;
+        }
+
+        .foundations {
             display: flex;
             gap: 10px;
         }
 
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background: #007bff;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #545b62;
-        }
-
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #218838;
-        }
-
-        .game-info {
-            display: flex;
-            gap: 20px;
-            color: white;
-            font-size: 16px;
-        }
-
-        .info-item {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 8px 15px;
-            border-radius: 5px;
-        }
-
-        .top-section {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 40px;
-            min-height: 140px;
-        }
-
-        .stock-section {
-            display: flex;
-            gap: 15px;
-        }
-
-        .foundation-section {
-            display: flex;
-            gap: 15px;
-        }
-
-        .card-pile {
-            width: 90px;
-            height: 120px;
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .card-pile:hover {
-            border-color: rgba(255, 255, 255, 0.6);
-            transform: translateY(-5px);
-        }
-
-        .card-pile.empty::before {
-            content: attr(data-label);
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 12px;
-            text-align: center;
-        }
-
-        .card {
-            width: 90px;
-            height: 120px;
-            background: white;
-            border: 2px solid #333;
-            border-radius: 8px;
-            position: absolute;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 8px;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
-            z-index: 100;
-        }
-
-        .card.red {
-            color: #dc3545;
-        }
-
-        .card.black {
-            color: #000;
-        }
-
-        .card.face-down {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            cursor: default;
-        }
-
-        .card.face-down:hover {
-            transform: none;
-        }
-
-        .card.selected {
-            border-color: #ffc107;
-            box-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
-            transform: translateY(-15px);
-        }
-
-        .card-top {
+        .empty-foundation {
             font-size: 18px;
+            color: #666;
             font-weight: bold;
         }
 
-        .card-suit {
-            font-size: 24px;
-            text-align: center;
-        }
-
-        .card-bottom {
-            font-size: 18px;
+        #gameStatus {
             font-weight: bold;
-            text-align: right;
-            transform: rotate(180deg);
-        }
-
-        .card.face-down .card-back {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 40px;
-        }
-
-        .tableau-section {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            min-height: 400px;
-        }
-
-        .tableau-pile {
-            width: 90px;
-            min-height: 140px;
-            position: relative;
-        }
-
-        .tableau-pile .card {
-            position: absolute;
-            left: 0;
-        }
-
-        .foundation-pile[data-suit="spades"]::after { content: "♠"; color: #000; }
-        .foundation-pile[data-suit="hearts"]::after { content: "♥"; color: #dc3545; }
-        .foundation-pile[data-suit="diamonds"]::after { content: "♦"; color: #dc3545; }
-        .foundation-pile[data-suit="clubs"]::after { content: "♣"; color: #000; }
-
-        .foundation-pile::after {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 48px;
-            opacity: 0.3;
-        }
-
-        .win-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .win-modal.active {
-            display: flex;
-        }
-
-        .win-content {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            text-align: center;
-            animation: slideIn 0.5s;
-        }
-
-        @@keyframes slideIn {
-            from {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .win-content h2 {
-            color: #28a745;
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        .win-content p {
             font-size: 18px;
-            margin-bottom: 30px;
         }
-
-        .message {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 5px;
-            color: white;
-            font-weight: 600;
-            z-index: 999;
-            animation: fadeInOut 3s;
-        }
-
-        @@keyframes fadeInOut {
-            0%, 100% { opacity: 0; }
-            10%, 90% { opacity: 1; }
-        }
-
-        .message.success { background: #28a745; }
-        .message.error { background: #dc3545; }
-        .message.info { background: #17a2b8; }
     </style>
-</head>
-<body>
-    <div class="game-container">
-        <div class="game-header">
-            <h1 class="game-title">🃏 Klondike Solitaire</h1>
-            <div class="game-info">
-                <div class="info-item">
-                    <span>⏱️ Time: <span id="timer">00:00</span></span>
-                </div>
-                <div class="info-item">
-                    <span>📊 Score: <span id="score">0</span></span>
-                </div>
-                <div class="info-item">
-                    <span>🔄 Moves: <span id="moves">0</span></span>
-                </div>
-            </div>
-            <div class="game-controls">
-                <button class="btn btn-secondary" id="undoBtn">↶ Undo</button>
-                <button class="btn btn-secondary" id="redoBtn">↷ Redo</button>
-                <button class="btn btn-success" id="hintBtn">💡 Hint</button>
-                <button class="btn btn-primary" id="newGameBtn">🔄 New Game</button>
-            </div>
-        </div>
+}
 
-        <div class="top-section">
-            <div class="stock-section">
-                <div class="card-pile" id="stockPile" data-label="Stock"></div>
-                <div class="card-pile" id="wastePile" data-label="Waste"></div>
-            </div>
-
-            <div class="foundation-section">
-                <div class="card-pile foundation-pile" id="foundation-0" data-suit="spades"></div>
-                <div class="card-pile foundation-pile" id="foundation-1" data-suit="hearts"></div>
-                <div class="card-pile foundation-pile" id="foundation-2" data-suit="diamonds"></div>
-                <div class="card-pile foundation-pile" id="foundation-3" data-suit="clubs"></div>
-            </div>
-        </div>
-
-        <div class="tableau-section">
-            <div class="tableau-pile" id="tableau-0"></div>
-            <div class="tableau-pile" id="tableau-1"></div>
-            <div class="tableau-pile" id="tableau-2"></div>
-            <div class="tableau-pile" id="tableau-3"></div>
-            <div class="tableau-pile" id="tableau-4"></div>
-            <div class="tableau-pile" id="tableau-5"></div>
-            <div class="tableau-pile" id="tableau-6"></div>
-        </div>
-    </div>
-
-    <div class="win-modal" id="winModal">
-        <div class="win-content">
-            <h2>🎉 Congratulations!</h2>
-            <p>You won the game!</p>
-            <p>Time: <span id="finalTime"></span></p>
-            <p>Score: <span id="finalScore"></span></p>
-            <p>Moves: <span id="finalMoves"></span></p>
-            <button class="btn btn-primary" onclick="startNewGame()">Play Again</button>
-        </div>
-    </div>
-
+@section Scripts {
     <script>
-        let gameState = null;
         let selectedCard = null;
-        let timerInterval = null;
-        let startTime = null;
-        let elapsedSeconds = 0;
+        let selectedWaste = false;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            startNewGame();
-            setupEventListeners();
+        function drawFromStock() {
+            $.post('@Url.Action("MakeMove", "Game")', {
+                moveType: 'draw'
+            }, function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert('Cannot draw card: ' + (response.error || 'Unknown error'));
+                }
+            }).fail(function() {
+                alert('Error drawing card');
+            });
+        }
+
+        function handleCardClick(cardElement, columnIndex, cardIndex, event) {
+            event.stopPropagation(); // Prevent column click
+
+            const card = $(cardElement);
+            if (card.hasClass('back')) {
+                return; // Can't select face-down cards
+            }
+
+            // Remove previous selection
+            $('.card.selected').removeClass('selected');
+            selectedWaste = false;
+
+            // Select new card
+            card.addClass('selected');
+            selectedCard = {
+                element: cardElement,
+                column: columnIndex,
+                index: cardIndex
+            };
+
+            console.log('Selected card:', selectedCard);
+        }
+
+        function selectWaste() {
+            if ($('.waste-card').length === 0) return;
+
+            // Remove previous selection
+            $('.card.selected').removeClass('selected');
+
+            // Select waste
+            $('.waste-card').addClass('selected');
+            selectedCard = null;
+            selectedWaste = true;
+
+            console.log('Selected waste card');
+        }
+
+        function moveToFoundation(suit) {
+            let moveData = {};
+
+            if (selectedWaste) {
+                moveData = {
+                    moveType: 'waste_to_foundation',
+                    foundationSuit: suit
+                };
+            } else if (selectedCard) {
+                moveData = {
+                    moveType: 'tableau_to_foundation',
+                    foundationSuit: suit,
+                    fromColumn: selectedCard.column,
+                    cardIndex: selectedCard.index
+                };
+            } else {
+                alert('Please select a card first');
+                return;
+            }
+
+            $.post('@Url.Action("MakeMove", "Game")', moveData, function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert('Cannot move to foundation: ' + (response.error || 'Invalid move'));
+                }
+            }).fail(function() {
+                alert('Error moving card');
+            });
+        }
+
+        function moveToTableau(columnIndex) {
+            let moveData = {};
+
+            if (selectedWaste) {
+                moveData = {
+                    moveType: 'waste_to_tableau',
+                    toColumn: columnIndex
+                };
+            } else if (selectedCard) {
+                if (selectedCard.column === columnIndex) {
+                    alert('Cannot move to same column');
+                    return;
+                }
+
+                moveData = {
+                    moveType: 'tableau_to_tableau',
+                    fromColumn: selectedCard.column,
+                    toColumn: columnIndex,
+                    cardIndex: selectedCard.index
+                };
+            } else {
+                alert('Please select a card first');
+                return;
+            }
+
+            $.post('@Url.Action("MakeMove", "Game")', moveData, function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert('Invalid move: ' + (response.error || 'Cannot move card'));
+                }
+            }).fail(function() {
+                alert('Error moving card');
+            });
+        }
+
+        function autoMoveToFoundation(cardElement, columnIndex, cardIndex) {
+            // Select the card first
+            handleCardClick(cardElement, columnIndex, cardIndex, { stopPropagation: function() {} });
+
+            // Try each foundation
+            const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+            let moved = false;
+
+            // We'll try one foundation - the logic will handle checking which one works
+            if (selectedCard) {
+                $.post('@Url.Action("MakeMove", "Game")', {
+                    moveType: 'tableau_to_foundation',
+                    foundationSuit: suits[0], // Try first suit
+                    fromColumn: selectedCard.column,
+                    cardIndex: selectedCard.index
+                }, function(response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        // If first suit fails, try others
+                        tryOtherFoundations(suits.slice(1), columnIndex, cardIndex);
+                    }
+                });
+            }
+        }
+
+        function tryOtherFoundations(remainingSuits, columnIndex, cardIndex) {
+            if (remainingSuits.length === 0) {
+                alert('Cannot auto-move to any foundation');
+                return;
+            }
+
+            const suit = remainingSuits[0];
+            $.post('@Url.Action("MakeMove", "Game")', {
+                moveType: 'tableau_to_foundation',
+                foundationSuit: suit,
+                fromColumn: columnIndex,
+                cardIndex: cardIndex
+            }, function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    tryOtherFoundations(remainingSuits.slice(1), columnIndex, cardIndex);
+                }
+            });
+        }
+
+        // Clear selection when clicking outside
+        $(document).click(function() {
+            $('.card.selected').removeClass('selected');
+            selectedCard = null;
+            selectedWaste = false;
         });
 
-        function setupEventListeners() {
-            document.getElementById('newGameBtn').addEventListener('click', startNewGame);
-            document.getElementById('undoBtn').addEventListener('click', undoMove);
-            document.getElementById('redoBtn').addEventListener('click', redoMove);
-            document.getElementById('hintBtn').addEventListener('click', showHint);
-            document.getElementById('stockPile').addEventListener('click', drawFromStock);
-        }
+        // Prevent card clicks from triggering document click
+        $('.card').click(function(event) {
+            event.stopPropagation();
+        });
 
-        async function startNewGame() {
-            try {
-                const response = await fetch('/Game/NewGame', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                if (response.ok) {
-                    gameState = await response.json();
-                    renderGame();
-                    startTimer();
-                    showMessage('New game started! Good luck! 🎮', 'success');
-                } else {
-                    showMessage('Error starting new game', 'error');
-                }
-            } catch (error) {
-                showMessage('Error connecting to server', 'error');
-                console.error(error);
-            }
-        }
-
-        function renderGame() {
-            if (!gameState) return;
-
-            renderStock();
-            renderWaste();
-            renderFoundations();
-            renderTableau();
-            updateGameInfo();
-        }
-
-        function renderStock() {
-            const stockPile = document.getElementById('stockPile');
-            stockPile.innerHTML = '';
-            stockPile.classList.remove('empty');
-
-            if (gameState.stock && gameState.stock.length > 0) {
-                const card = createCardElement(null, true);
-                stockPile.appendChild(card);
-            } else {
-                stockPile.classList.add('empty');
-            }
-        }
-
-        function renderWaste() {
-            const wastePile = document.getElementById('wastePile');
-            wastePile.innerHTML = '';
-            wastePile.classList.remove('empty');
-
-            if (gameState.waste && gameState.waste.length > 0) {
-                const topCard = gameState.waste[gameState.waste.length - 1];
-                const card = createCardElement(topCard, false, 'waste', 'waste');
-                wastePile.appendChild(card);
-            } else {
-                wastePile.classList.add('empty');
-            }
-        }
-
-        function renderFoundations() {
-            for (let i = 0; i < 4; i++) {
-                const foundationPile = document.getElementById(`foundation-${i}`);
-                foundationPile.innerHTML = '';
-                foundationPile.classList.remove('empty');
-
-                const foundation = gameState.foundations[i];
-                if (foundation && foundation.length > 0) {
-                    const topCard = foundation[foundation.length - 1];
-                    const card = createCardElement(topCard, false, `foundation-${i}`, 'foundation', i);
-                    foundationPile.appendChild(card);
-                } else {
-                    foundationPile.classList.add('empty');
-                }
-            }
-        }
-
-        function renderTableau() {
-            for (let i = 0; i < 7; i++) {
-                const tableauPile = document.getElementById(`tableau-${i}`);
-                tableauPile.innerHTML = '';
-
-                const pile = gameState.tableau[i];
-                if (pile && pile.length > 0) {
-                    pile.forEach((card, index) => {
-                        const cardElement = createCardElement(card, !card.faceUp, `tableau-${i}-${index}`, 'tableau', i, index);
-                        cardElement.style.top = `${index * 25}px`;
-                        tableauPile.appendChild(cardElement);
-                    });
-                }
-            }
-        }
-
-        function createCardElement(cardData, isFaceDown, id, source, pileIndex, cardIndex) {
-            const card = document.createElement('div');
-            card.className = 'card';
-            if (id) card.id = id;
-
-            if (isFaceDown) {
-                card.classList.add('face-down');
-                card.innerHTML = '<div class="card-back">🂠</div>';
-            } else if (cardData) {
-                const color = (cardData.suit === 'Hearts' || cardData.suit === 'Diamonds') ? 'red' : 'black';
-                card.classList.add(color);
-
-                const suitSymbol = getSuitSymbol(cardData.suit);
-                const rankSymbol = getRankSymbol(cardData.rank);
-
-                card.innerHTML = `
-                    <div class="card-top">${rankSymbol}</div>
-                    <div class="card-suit">${suitSymbol}</div>
-                    <div class="card-bottom">${rankSymbol}</div>
-                `;
-
-                card.dataset.source = source;
-                card.dataset.pileIndex = pileIndex;
-                card.dataset.cardIndex = cardIndex;
-                card.dataset.suit = cardData.suit;
-                card.dataset.rank = cardData.rank;
-
-                card.addEventListener('click', () => handleCardClick(card, cardData));
-            }
-
-            return card;
-        }
-
-        function getSuitSymbol(suit) {
-            const suits = {
-                'Spades': '♠',
-                'Hearts': '♥',
-                'Diamonds': '♦',
-                'Clubs': '♣'
-            };
-            return suits[suit] || suit;
-        }
-
-        function getRankSymbol(rank) {
-            const ranks = {
-                1: 'A',
-                11: 'J',
-                12: 'Q',
-                13: 'K'
-            };
-            return ranks[rank] || rank.toString();
-        }
-
-        function handleCardClick(cardElement, cardData) {
-            if (!selectedCard) {
-                selectedCard = {
-                    element: cardElement,
-                    data: cardData,
-                    source: cardElement.dataset.source,
-                    pileIndex: cardElement.dataset.pileIndex,
-                    cardIndex: cardElement.dataset.cardIndex
-                };
-                cardElement.classList.add('selected');
-            } else {
-                attemptMove(selectedCard, {
-                    source: cardElement.dataset.source,
-                    pileIndex: cardElement.dataset.pileIndex
-                });
-            }
-        }
-
-        async function attemptMove(from, to) {
-            const moveData = {
-                fromSource: from.source,
-                fromPileIndex: parseInt(from.pileIndex),
-                fromCardIndex: parseInt(from.cardIndex),
-                toSource: to.source,
-                toPileIndex: parseInt(to.pileIndex)
-            };
-
-            try {
-                const response = await fetch('/Game/MakeMove', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(moveData)
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    gameState = result.gameState;
-                    renderGame();
-                    showMessage('Move successful! ✅', 'success');
-
-                    if (result.gameWon) {
-                        showWinModal();
+        $(document).ready(function() {
+            $('#newGame').click(function() {
+                $.post('@Url.Action("NewGame", "Game")', function(response) {
+                    if (response.success) {
+                        location.reload();
                     }
-                } else {
-                    showMessage(result.message || 'Invalid move! ❌', 'error');
-                }
-            } catch (error) {
-                showMessage('Error making move', 'error');
-                console.error(error);
-            } finally {
-                if (selectedCard) {
-                    selectedCard.element.classList.remove('selected');
-                    selectedCard = null;
-                }
-            }
-        }
-
-        async function drawFromStock() {
-            try {
-                const response = await fetch('/Game/DrawCard', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
                 });
+            });
 
-                const result = await response.json();
+            $('#drawCard').click(drawFromStock);
 
-                if (result.success) {
-                    gameState = result.gameState;
-                    renderGame();
-                } else {
-                    showMessage(result.message || 'Cannot draw card', 'error');
+            // Game status
+        @if (Model.IsGameWon)
+        {
+            <text>
+                    $('#gameStatus').html('<span class="text-success">🎉 You Won!</span>');
+                    setTimeout(() => {
+                        if (confirm('Congratulations! You won the game! Start a new game?')) {
+                            $.post('@Url.Action("NewGame", "Game")', function() {
+                                location.reload();
+                            });
+                        }
+                    }, 500);
+            </text>
+        }
+
+            // Add keyboard shortcuts
+            $(document).keypress(function(e) {
+                if (e.which === 100 || e.which === 68) { // 'd' or 'D'
+                    drawFromStock();
+                } else if (e.which === 110 || e.which === 78) { // 'n' or 'N'
+                    $('#newGame').click();
                 }
-            } catch (error) {
-                showMessage('Error drawing card', 'error');
-                console.error(error);
-            }
-        }
+            });
 
-        async function undoMove() {
-            try {
-                const response = await fetch('/Game/Undo', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    gameState = result.gameState;
-                    renderGame();
-                    showMessage('Move undone! ↶', 'info');
-                } else {
-                    showMessage('Nothing to undo', 'error');
-                }
-            } catch (error) {
-                showMessage('Error undoing move', 'error');
-                console.error(error);
-            }
-        }
-
-        async function redoMove() {
-            try {
-                const response = await fetch('/Game/Redo', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    gameState = result.gameState;
-                    renderGame();
-                    showMessage('Move redone! ↷', 'info');
-                } else {
-                    showMessage('Nothing to redo', 'error');
-                }
-            } catch (error) {
-                showMessage('Error redoing move', 'error');
-                console.error(error);
-            }
-        }
-
-        async function showHint() {
-            try {
-                const response = await fetch('/Game/GetHint', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                const result = await response.json();
-
-                if (result.success && result.hint) {
-                    showMessage(`💡 Hint: ${result.hint}`, 'info');
-                } else {
-                    showMessage('No hints available', 'info');
-                }
-            } catch (error) {
-                showMessage('Error getting hint', 'error');
-                console.error(error);
-            }
-        }
-
-        function updateGameInfo() {
-            if (!gameState) return;
-
-            document.getElementById('score').textContent = gameState.score || 0;
-            document.getElementById('moves').textContent = gameState.moves || 0;
-        }
-
-        function startTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-
-            elapsedSeconds = 0;
-            startTime = Date.now();
-
-            timerInterval = setInterval(() => {
-                elapsedSeconds++;
-                const minutes = Math.floor(elapsedSeconds / 60);
-                const seconds = elapsedSeconds % 60;
-                document.getElementById('timer').textContent =
-                    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            }, 1000);
-        }
-
-        function showWinModal() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-
-            const minutes = Math.floor(elapsedSeconds / 60);
-            const seconds = elapsedSeconds % 60;
-            const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
-            document.getElementById('finalTime').textContent = timeStr;
-            document.getElementById('finalScore').textContent = gameState.score || 0;
-            document.getElementById('finalMoves').textContent = gameState.moves || 0;
-            document.getElementById('winModal').classList.add('active');
-        }
-
-        function showMessage(text, type) {
-            const existingMessage = document.querySelector('.message');
-            if (existingMessage) {
-                existingMessage.remove();
-            }
-
-            const message = document.createElement('div');
-            message.className = `message ${type}`;
-            message.textContent = text;
-            document.body.appendChild(message);
-
-            setTimeout(() => {
-                message.remove();
-            }, 3000);
-        }
+            console.log('Game loaded - How to play:');
+            console.log('1. Click on face-up cards to select them');
+            console.log('2. Click on foundation piles to move selected card there');
+            console.log('3. Click on tableau columns to move selected card there');
+            console.log('4. Double-click cards to try auto-moving to foundation');
+            console.log('5. Press D to draw, N for new game');
+        });
     </script>
-    <script src="~/js/data-structures/linkedlist.js"></script>
-    <script src="~/js/data-structures/stack.js"></script>
-    <script src="~/js/data-structures/queue.js"></script>
-    @* <script src="~/js/models/Card.js"></script> *@
-    @* <script src="~/js/models/Deck.js"></script> *@
-    @* <script src="~/js/game.js"></script> *@
-</body>
-</html>
+}
+
+@functions {
+    private string GetRankSymbol(int rank)
+    {
+        var symbols = new Dictionary<int, string>
+        {
+            {1, "A"}, {11, "J"}, {12, "Q"}, {13, "K"}
+        };
+        return symbols.ContainsKey(rank) ? symbols[rank] : rank.ToString();
+    }
+
+    private string GetSuitSymbol(string suit)
+    {
+        var symbols = new Dictionary<string, string>
+        {
+            {"hearts", "♥"}, {"diamonds", "♦"}, {"clubs", "♣"}, {"spades", "♠"}
+        };
+        return symbols.ContainsKey(suit.ToLower()) ? symbols[suit.ToLower()] : suit[0].ToString().ToUpper();
+    }
+}

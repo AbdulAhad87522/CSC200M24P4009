@@ -1,5 +1,10 @@
 wwwroot\css\site.css
 wwwroot\favicon.ico
+wwwroot\js\data-structures\customqueue.js
+wwwroot\js\data-structures\customstack.js
+wwwroot\js\data-structures\linkedlist.js
+wwwroot\js\models\cards.js
+wwwroot\js\models\deck.js
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap.css
 wwwroot\lib\bootstrap\dist\css\bootstrap.css.map

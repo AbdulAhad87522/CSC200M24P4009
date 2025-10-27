@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\Desktop\\Solitaire\\Solitaire\\Solitaire.csproj": {}
+    "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Solitaire.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\Desktop\\Solitaire\\Solitaire\\Solitaire.csproj": {
+    "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Solitaire.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Desktop\\Solitaire\\Solitaire\\Solitaire.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Solitaire.csproj",
         "projectName": "Solitaire",
-        "projectPath": "C:\\Users\\User\\Desktop\\Solitaire\\Solitaire\\Solitaire.csproj",
+        "projectPath": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Solitaire.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\Desktop\\Solitaire\\Solitaire\\obj\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

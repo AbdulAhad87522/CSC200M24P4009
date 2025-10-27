@@ -14,9 +14,9 @@
 
     public class CustomLinkedLis<T>
     {
-        private ListNode<T> head;
-        private ListNode<T> tail;
-        private int length;
+        public ListNode<T> head;
+        public ListNode<T> tail;
+        public int length;
 
         public CustomLinkedLis()
         {
@@ -78,29 +78,59 @@
             }
         }
 
-        public void PopBack()
+        //public void PopBack()
+        //{
+        //    if (head == null)
+        //    {
+        //        Console.WriteLine("empty list");
+        //        return;
+        //    }
+        //    else if (head == tail)
+        //    {
+        //        head = tail = null;
+        //        length--;
+        //    }
+        //    else
+        //    {
+        //        ListNode<T> temp = head;
+        //        while (temp.Next.Next != null)
+        //        {
+        //            temp = temp.Next;
+        //        }
+        //        temp.Next = null;
+        //        tail = temp;
+        //        length--;
+        //    }
+        //}
+        public T PopBack()
         {
             if (head == null)
             {
-                Console.WriteLine("empty list");
-                return;
+                throw new InvalidOperationException("empty list");
             }
-            else if (head == tail)
+
+            if (head == tail)
             {
+                // Only one element in list
+                T data = head.Data;
                 head = tail = null;
                 length--;
+                return data;
             }
-            else
+
+            // Find the node before tail
+            ListNode<T> temp = head;
+            while (temp.Next != tail)
             {
-                ListNode<T> temp = head;
-                while (temp.Next.Next != null)
-                {
-                    temp = temp.Next;
-                }
-                temp.Next = null;
-                tail = temp;
-                length--;
+                temp = temp.Next;
             }
+
+            // Remove and return tail
+            T dataBack = tail.Data;
+            temp.Next = null;
+            tail = temp;
+            length--;
+            return dataBack;
         }
 
         public void Insert(T data, int pos)
@@ -159,6 +189,56 @@
             if (head == null)
                 return default(T);
             return head.Data;
+        }
+
+        public bool IsEmpty()
+        {
+            return head == null;
+            // OR: return Length == 0;
+        }
+
+        public bool Remove(T data)
+        {
+            if (head == null)
+            {
+                return false; // List is empty
+            }
+
+            // If head needs to be removed
+            if (head.Data.Equals(data))
+            {
+                head = head.Next;
+                length--;
+
+                // If list becomes empty, update tail
+                if (head == null)
+                {
+                    tail = null;
+                }
+                return true;
+            }
+
+            // Search for the node to remove
+            ListNode<T> current = head;
+            while (current.Next != null)
+            {
+                if (current.Next.Data.Equals(data))
+                {
+                    // Found the node to remove
+                    current.Next = current.Next.Next;
+                    length--;
+
+                    // If we removed the tail, update tail reference
+                    if (current.Next == null)
+                    {
+                        tail = current;
+                    }
+                    return true;
+                }
+                current = current.Next;
+            }
+
+            return false; // Data not found
         }
     }
 }
