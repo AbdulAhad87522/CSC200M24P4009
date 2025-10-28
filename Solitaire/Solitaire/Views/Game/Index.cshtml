@@ -207,17 +207,22 @@
         let selectedCard = null;
         let selectedWaste = false;
 
-        function drawFromStock() {
+               function drawFromStock() {
+            console.log('Attempting to draw from stock...');
+
             $.post('@Url.Action("MakeMove", "Game")', {
                 moveType: 'draw'
             }, function(response) {
+                console.log('Response:', response);
                 if (response.success) {
                     location.reload();
                 } else {
                     alert('Cannot draw card: ' + (response.error || 'Unknown error'));
                 }
-            }).fail(function() {
-                alert('Error drawing card');
+            }).fail(function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+                console.error('Response Text:', xhr.responseText);
+                alert('Error drawing card. Check console for details. Status: ' + status);
             });
         }
 

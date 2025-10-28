@@ -19,9 +19,11 @@ namespace Solitaire.Controllers
         {
             try
             {
+                Console.WriteLine($"Received move request: {request.MoveType}");
+
                 bool moveSuccessful = false;
 
-                switch (request.MoveType.ToLower())
+                switch (request.MoveType?.ToLower())
                 {
                     case "draw":
                         _game.DrawFromStock();
@@ -41,14 +43,15 @@ namespace Solitaire.Controllers
                         break;
 
                     case "tableau_to_foundation":
-                        // First try to move from tableau to foundation
                         moveSuccessful = _game.MoveToFoundation(request.FoundationSuit);
                         break;
 
                     case "waste_to_tableau":
-                        // You'll need to implement this
                         moveSuccessful = MoveWasteToTableau(request.ToColumn);
                         break;
+
+                    default:
+                        return Json(new { success = false, error = $"Unknown move type: {request.MoveType}" });
                 }
 
                 var model = CreateViewModel();
@@ -61,6 +64,7 @@ namespace Solitaire.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error in MakeMove: {ex}");
                 return Json(new { success = false, error = ex.Message });
             }
         }

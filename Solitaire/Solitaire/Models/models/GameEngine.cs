@@ -396,18 +396,15 @@ public class GameEngine
             // Recycle waste back to stock
             while (!Waste.IsEmpty())
             {
-                Card card = Waste.Pop();
-                card.IsFaceUp = false;
-                Stock.Enqueue(card);
+                var wasteCard = Waste.Pop(); // Different name
+                wasteCard.IsFaceUp = false;
+                Stock.Enqueue(wasteCard);
             }
             return;
         }
 
-        Card drawnCard = Stock.Dequeue();
-        if (drawnCard != null)
-        {
-            drawnCard.IsFaceUp = true;
-            Waste.Push(drawnCard);
-        }
+        var stockCard = Stock.Dequeue(); // Different name
+        stockCard.IsFaceUp = true;
+        Waste.Push(stockCard);
     }
 }
