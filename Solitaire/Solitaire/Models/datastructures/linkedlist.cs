@@ -12,13 +12,13 @@
         }
     }
 
-    public class CustomLinkedLis<T>
+    public class CustomLinkedList<T> // UPDATED: Fixed typo from CustomLinkedLis to CustomLinkedList
     {
         public ListNode<T> head;
         public ListNode<T> tail;
         public int length;
 
-        public CustomLinkedLis()
+        public CustomLinkedList()
         {
             head = null;
             tail = null;
@@ -70,7 +70,6 @@
                 head = head.Next;
                 temp.Next = null;
 
-                // If list becomes empty after pop
                 if (head == null)
                     tail = null;
 
@@ -78,30 +77,6 @@
             }
         }
 
-        //public void PopBack()
-        //{
-        //    if (head == null)
-        //    {
-        //        Console.WriteLine("empty list");
-        //        return;
-        //    }
-        //    else if (head == tail)
-        //    {
-        //        head = tail = null;
-        //        length--;
-        //    }
-        //    else
-        //    {
-        //        ListNode<T> temp = head;
-        //        while (temp.Next.Next != null)
-        //        {
-        //            temp = temp.Next;
-        //        }
-        //        temp.Next = null;
-        //        tail = temp;
-        //        length--;
-        //    }
-        //}
         public T PopBack()
         {
             if (head == null)
@@ -111,21 +86,18 @@
 
             if (head == tail)
             {
-                // Only one element in list
                 T data = head.Data;
                 head = tail = null;
                 length--;
                 return data;
             }
 
-            // Find the node before tail
             ListNode<T> temp = head;
-            while (temp.Next != tail)
+            while (temp.Next != tail) // ✅ This is correct
             {
                 temp = temp.Next;
             }
 
-            // Remove and return tail
             T dataBack = tail.Data;
             temp.Next = null;
             tail = temp;
@@ -165,7 +137,6 @@
                 newNode.Next = temp.Next;
                 temp.Next = newNode;
 
-                // Update tail if inserting at the end
                 if (newNode.Next == null)
                     tail = newNode;
 
@@ -194,23 +165,20 @@
         public bool IsEmpty()
         {
             return head == null;
-            // OR: return Length == 0;
         }
 
         public bool Remove(T data)
         {
             if (head == null)
             {
-                return false; // List is empty
+                return false;
             }
 
-            // If head needs to be removed
             if (head.Data.Equals(data))
             {
                 head = head.Next;
                 length--;
 
-                // If list becomes empty, update tail
                 if (head == null)
                 {
                     tail = null;
@@ -218,17 +186,14 @@
                 return true;
             }
 
-            // Search for the node to remove
             ListNode<T> current = head;
             while (current.Next != null)
             {
                 if (current.Next.Data.Equals(data))
                 {
-                    // Found the node to remove
                     current.Next = current.Next.Next;
                     length--;
 
-                    // If we removed the tail, update tail reference
                     if (current.Next == null)
                     {
                         tail = current;
@@ -238,7 +203,7 @@
                 current = current.Next;
             }
 
-            return false; // Data not found
+            return false;
         }
     }
 }

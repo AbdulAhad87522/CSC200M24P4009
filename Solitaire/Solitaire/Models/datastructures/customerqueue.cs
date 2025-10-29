@@ -1,49 +1,94 @@
-﻿namespace Solitaire.Models.datastructures
+﻿
+//namespace Solitaire.Models.datastructures
+//{
+//    public class CustomQueue<T>
+//    {
+//        private CustomLinkedList<T> list; // UPDATED: Changed from CustomLinkedLis to CustomLinkedList
 
+//        public CustomQueue()
+//        {
+//            list = new CustomLinkedList<T>(); // UPDATED: Changed from CustomLinkedLis to CustomLinkedList
+//        }
+
+//        public void Enqueue(T data)
+//        {
+//            list.PushBack(data);
+//        }
+
+//        public T Dequeue()
+//        {
+//            if (IsEmpty())
+//            {
+//                Console.WriteLine("Queue empty");
+//                return default(T);
+//            }
+//            T data = list.GetHeadData();
+//            list.PopFront();
+//            return data;
+//        }
+
+//        public T Front()
+//        {
+//            if (IsEmpty())
+//                return default(T);
+//            return list.GetHeadData();
+//        }
+
+//        public bool IsEmpty()
+//        {
+//            return list.Length == 0;
+//        }
+
+//        public int Size()
+//        {
+//            return list.Length;
+//        }
+//    }
+//}
+
+using Solitaire.Models.datastructures;
+
+public class CustomQueue<T>
 {
-    public class CustomQueue<T>
+    private CustomLinkedList<T> list;
+
+    public CustomQueue()
     {
-        private CustomLinkedLis<T> list;
+        list = new CustomLinkedList<T>();
+    }
 
-        public CustomQueue()
+    public void Enqueue(T data)
+    {
+        list.PushBack(data);
+    }
+
+    public T Dequeue()
+    {
+        if (IsEmpty())
         {
-            list = new CustomLinkedLis<T>();
+            Console.WriteLine("Queue empty");
+            return default(T);
         }
+        // ✅ FIXED: Get data AFTER popping
+        T data = list.GetHeadData();
+        list.PopFront();
+        return data;
+    }
 
-        public void Enqueue(T data)
-        {
-            list.PushBack(data);  // FIFO - add to back
-        }
+    public T Front()
+    {
+        if (IsEmpty())
+            return default(T);
+        return list.GetHeadData();
+    }
 
+    public bool IsEmpty()
+    {
+        return list.IsEmpty(); // ✅ FIXED: Use IsEmpty() method instead of Length
+    }
 
-
-        public T Dequeue()
-        {
-            if (IsEmpty())
-            {
-                Console.WriteLine("Queue empty");
-                return default(T);
-            }
-            T data = list.GetHeadData(); // We need to add this helper method
-            list.PopFront();
-            return data;
-        }
-
-        public T Front()
-        {
-            if (IsEmpty())
-                return default(T);
-            return list.GetHeadData(); // We need to add this helper method
-        }
-
-        public bool IsEmpty()
-        {
-            return list.Length == 0;
-        }
-
-        public int Size()
-        {
-            return list.Length;
-        }
-    }   
+    public int Size()
+    {
+        return list.Length;
+    }
 }

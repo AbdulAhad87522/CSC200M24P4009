@@ -23,7 +23,7 @@ public class TestController : Controller
 
             // Test Linked List
             results.Add("\n🔗 Testing Linked List:");
-            var list = new CustomLinkedLis<int>();
+            var list = new CustomLinkedList<int>();
             list.PushFront(1);
             list.PushBack(2);
             list.Insert(3, 2);
