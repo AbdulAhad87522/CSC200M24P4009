@@ -7,153 +7,122 @@ namespace Solitaire.Controllers
     public class GameController : Controller
     {
         private static GameEngine _game;
+        private static object _gameLock = new object();
 
         public IActionResult Index()
         {
-            _game = new GameEngine();
-            var model = CreateViewModel();
-            return View(model);
+            lock (_gameLock)
+            {
+                _game = new GameEngine();
+                var model = CreateViewModel();
+                return View(model);
+            }
         }
+
         [HttpPost]
         public IActionResult MakeMove([FromBody] MoveRequest request)
         {
-            try
+            lock (_gameLock)
             {
-                Console.WriteLine($"=== MOVE REQUEST ===");
-                Console.WriteLine($"MoveType: {request.MoveType}");
-                Console.WriteLine($"FromColumn: {request.FromColumn}");
-                Console.WriteLine($"ToColumn: {request.ToColumn}");
-                Console.WriteLine($"CardIndex: {request.CardIndex}");
-                Console.WriteLine($"FoundationSuit: {request.FoundationSuit}");
-
-                bool moveSuccessful = false;
-
-                switch (request.MoveType?.ToLower())
+                try
                 {
-                    case "draw":
-                        Console.WriteLine("Drawing from stock...");
-                        _game.DrawFromStock();
-                        moveSuccessful = true;
-                        break;
+                    if (_game == null)
+                    {
+                        _game = new GameEngine();
+                    }
 
-                    case "tableau_to_tableau":
-                        Console.WriteLine($"Moving tableau: {request.FromColumn} -> {request.ToColumn} at index {request.CardIndex}");
-                        moveSuccessful = _game.MoveTableauCards(
-                            request.FromColumn ?? 0,
-                            request.ToColumn ?? 0,
-                            request.CardIndex ?? 0
-                        );
-                        Console.WriteLine($"Tableau move result: {moveSuccessful}");
-                        break;
+                    Console.WriteLine($"=== MOVE REQUEST ===");
+                    Console.WriteLine($"MoveType: {request.MoveType}");
+                    Console.WriteLine($"FromColumn: {request.FromColumn}");
+                    Console.WriteLine($"ToColumn: {request.ToColumn}");
+                    Console.WriteLine($"CardIndex: {request.CardIndex}");
+                    Console.WriteLine($"FoundationSuit: {request.FoundationSuit}");
 
-                    case "waste_to_foundation":
-                        Console.WriteLine($"Moving waste to {request.FoundationSuit} foundation");
-                        moveSuccessful = _game.MoveWasteToFoundation(request.FoundationSuit);
-                        Console.WriteLine($"Waste to foundation result: {moveSuccessful}");
-                        break;
+                    bool moveSuccessful = false;
 
-                    case "tableau_to_foundation":
-                        Console.WriteLine($"Moving tableau to {request.FoundationSuit} foundation");
-                        moveSuccessful = _game.MoveTableauToFoundation(
-                            request.FromColumn ?? 0,
-                            request.CardIndex ?? 0,
-                            request.FoundationSuit
-                        );
-                        Console.WriteLine($"Tableau to foundation result: {moveSuccessful}");
-                        break;
+                    switch (request.MoveType?.ToLower())
+                    {
+                        case "draw":
+                            Console.WriteLine("Drawing from stock...");
+                            _game.DrawFromStock();
+                            moveSuccessful = true;
+                            break;
 
-                    case "waste_to_tableau":
-                        Console.WriteLine($"Moving waste to tableau column {request.ToColumn}");
-                        moveSuccessful = MoveWasteToTableau(request.ToColumn ?? 0);
-                        Console.WriteLine($"Waste to tableau result: {moveSuccessful}");
-                        break;
+                        case "tableau_to_tableau":
+                            Console.WriteLine($"Moving tableau: {request.FromColumn} -> {request.ToColumn} at index {request.CardIndex}");
+                            int fromCol = request.FromColumn ?? 0;
+                            int toCol = request.ToColumn ?? 0;
+                            int cardIdx = request.CardIndex ?? 0;
 
-                    default:
-                        Console.WriteLine($"Unknown move type: {request.MoveType}");
-                        return Json(new { success = false, error = $"Unknown move type: {request.MoveType}" });
+                            if (fromCol >= 0 && fromCol < 7 && toCol >= 0 && toCol < 7)
+                            {
+                                moveSuccessful = _game.MoveTableauCards(fromCol, toCol, cardIdx);
+                                Console.WriteLine($"Tableau move result: {moveSuccessful}");
+                            }
+                            break;
+
+                        case "waste_to_foundation":
+                            Console.WriteLine($"Moving waste to {request.FoundationSuit} foundation");
+                            moveSuccessful = _game.MoveWasteToFoundation(request.FoundationSuit);
+                            Console.WriteLine($"Waste to foundation result: {moveSuccessful}");
+                            break;
+
+                        case "tableau_to_foundation":
+                            Console.WriteLine($"Moving tableau to {request.FoundationSuit} foundation");
+                            moveSuccessful = _game.MoveTableauToFoundation(
+                                request.FromColumn ?? 0,
+                                request.CardIndex ?? 0,
+                                request.FoundationSuit
+                            );
+                            Console.WriteLine($"Tableau to foundation result: {moveSuccessful}");
+                            break;
+
+                        case "waste_to_tableau":
+                            Console.WriteLine($"Moving waste to tableau column {request.ToColumn}");
+                            int wasteTo = request.ToColumn ?? 0;
+
+                            if (wasteTo >= 0 && wasteTo < 7)
+                            {
+                                moveSuccessful = _game.MoveWasteToTableau(wasteTo);
+                                Console.WriteLine($"Waste to tableau result: {moveSuccessful}");
+                            }
+                            break;
+
+                        default:
+                            Console.WriteLine($"Unknown move type: {request.MoveType}");
+                            return Json(new { success = false, error = $"Unknown move type: {request.MoveType}" });
+                    }
+
+                    var model = CreateViewModel();
+                    return Json(new
+                    {
+                        success = moveSuccessful,
+                        gameState = model,
+                        isGameWon = _game.IsGameWon(),
+                        error = moveSuccessful ? null : "Invalid move"
+                    });
                 }
-
-                var model = CreateViewModel();
-                return Json(new
+                catch (Exception ex)
                 {
-                    success = moveSuccessful,
-                    gameState = model,
-                    isGameWon = _game.IsGameWon()
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ ERROR in MakeMove: {ex}");
-                return Json(new { success = false, error = ex.Message });
-            }
-        }
-
-
-
-        private bool MoveWasteToTableau(int toColumn)
-        {
-            if (_game.Waste.IsEmpty()) return false;
-
-            var wasteCard = _game.Waste.Peek();
-            var targetColumn = _game.Tableau[toColumn];
-
-            if (targetColumn.IsEmpty())
-            {
-                // Can only place King on empty column
-                if (wasteCard.Rank == 13)
-                {
-                    var card = _game.Waste.Pop();
-                    targetColumn.PushBack(card);
-                    return true;
+                    Console.WriteLine($"❌ ERROR in MakeMove: {ex}");
+                    Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                    return Json(new { success = false, error = ex.Message });
                 }
-            }
-            else
-            {
-                var targetTopCard = targetColumn.tail.Data;
-                if (_game.IsOppositeColor(wasteCard, targetTopCard) &&
-                    wasteCard.Rank == targetTopCard.Rank - 1)
-                {
-                    var card = _game.Waste.Pop();
-                    targetColumn.PushBack(card);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        [HttpPost]
-        public IActionResult EmergencyTest()
-        {
-            try
-            {
-                // Test stock
-                int stockBefore = _game.Stock.Size();
-                _game.DrawFromStock();
-                int stockAfter = _game.Stock.Size();
-                int wasteAfter = _game.Waste.Size();
-
-                return Json(new
-                {
-                    success = true,
-                    message = $"Stock: {stockBefore} -> {stockAfter}, Waste: {wasteAfter}",
-                    worked = stockAfter < stockBefore
-                });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, error = ex.Message });
             }
         }
 
         [HttpPost]
         public IActionResult NewGame()
         {
-            _game = new GameEngine();
-            var model = CreateViewModel();
-            return Json(new { success = true, gameState = model });
+            lock (_gameLock)
+            {
+                _game = new GameEngine();
+                var model = CreateViewModel();
+                return Json(new { success = true, gameState = model });
+            }
         }
 
+        // ✅ FIXED: Don't destroy stacks when creating view model
         private GameViewModel CreateViewModel()
         {
             var model = new GameViewModel
@@ -165,7 +134,7 @@ namespace Solitaire.Controllers
                 IsGameWon = _game.IsGameWon()
             };
 
-            // Convert tableau to list of lists for easier display
+            // Convert tableau to list of lists
             foreach (var column in _game.Tableau)
             {
                 var columnCards = new List<Card>();
@@ -178,48 +147,46 @@ namespace Solitaire.Controllers
                 model.Tableau.Add(columnCards);
             }
 
-            // Convert foundations
+            // ✅ FIXED: Convert foundations WITHOUT destroying them
             var suits = new[] { "hearts", "diamonds", "clubs", "spades" };
             foreach (var suit in suits)
             {
-                model.Foundations[suit] = new List<Card>();
-                var foundationStack = _game.Foundations[suit];
-
-                // Convert stack to list (top card last for display)
-                var tempStack = new Stack<Card>();
-                while (!foundationStack.IsEmpty())
-                {
-                    tempStack.Push(foundationStack.Pop());
-                }
-
-                // Restore stack and build list
-                foreach (var card in tempStack)
-                {
-                    model.Foundations[suit].Add(card);
-                    foundationStack.Push(card);
-                }
-                model.Foundations[suit].Reverse(); // So top card is last
+                model.Foundations[suit] = GetStackAsList(_game.Foundations[suit]);
             }
 
-            // Convert waste stack to list
-            var wasteCards = new List<Card>();
-            var tempWasteStack = new Stack<Card>();
-            while (!_game.Waste.IsEmpty())
-            {
-                var card = _game.Waste.Pop();
-                tempWasteStack.Push(card);
-                wasteCards.Add(card);
-            }
-            // Restore waste stack
-            while (tempWasteStack.Count > 0)
-            {
-                _game.Waste.Push(tempWasteStack.Pop());
-            }
-            model.Waste = wasteCards;
+            // ✅ FIXED: Convert waste WITHOUT destroying it
+            model.Waste = GetStackAsList(_game.Waste);
 
             return model;
         }
 
+        // ✅ NEW: Helper method to read stack without destroying it
+        private List<Card> GetStackAsList(CustomStack<Card> stack)
+        {
+            var result = new List<Card>();
+            var tempList = new List<Card>();
+
+            // Pop all cards into temp list
+            while (!stack.IsEmpty())
+            {
+                tempList.Add(stack.Pop());
+            }
+
+            // Reverse to get correct order (bottom to top)
+            tempList.Reverse();
+
+            // Push back onto stack to restore it
+            foreach (var card in tempList)
+            {
+                stack.Push(card);
+            }
+
+            // Return the list in correct order
+            result = new List<Card>(tempList);
+            result.Reverse(); // Show top card last in list
+
+            return result;
+        }
     }
 
     public class MoveRequest

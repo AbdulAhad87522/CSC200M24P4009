@@ -6,7 +6,7 @@
 }
 
 <div class="container">
-    <h1>Solitaire</h1>
+    <h1>Solitaire Game</h1>
 
     <div class="row mb-4">
         <div class="col-md-12">
@@ -20,11 +20,15 @@
     <div class="row mb-4">
         <div class="col-md-2">
             <div class="card-area">
-                <h5>Stock: @Model.StockCount</h5>
-                <div class="card-slot stock" data-action="draw">
+                <h5>Stock: <span id="stockCount">@Model.StockCount</span></h5>
+                <div class="card-slot stock-pile" id="stockPile">
                     @if (Model.StockCount > 0)
                     {
                         <div class="card back">🂠</div>
+                    }
+                    else
+                    {
+                        <div class="empty-slot">♻️</div>
                     }
                 </div>
             </div>
@@ -32,7 +36,7 @@
         <div class="col-md-2">
             <div class="card-area">
                 <h5>Waste</h5>
-                <div class="card-slot waste">
+                <div class="card-slot waste-area" id="wasteArea">
                     @if (Model.Waste.Count > 0)
                     {
                         var topCard = Model.Waste[Model.Waste.Count - 1];
@@ -41,7 +45,8 @@
                              data-rank="@topCard.Rank"
                              data-suit="@topCard.Suit"
                              data-color="@topCard.Color"
-                             data-source="waste">
+                             data-source="waste"
+                             data-faceup="true">
                             <span class="card-value">@GetRankSymbol(topCard.Rank)@GetSuitSymbol(topCard.Suit)</span>
                         </div>
                     }
@@ -51,7 +56,7 @@
         <div class="col-md-8">
             <div class="card-area">
                 <h5>Foundations</h5>
-                <div class="foundations">
+                <div class="foundations" id="foundationsArea">
                     @foreach (var foundation in Model.Foundations)
                     {
                         <div class="card-slot foundation drop-target" data-suit="@foundation.Key" data-target="foundation">
@@ -67,7 +72,7 @@
                             }
                             else
                             {
-                                <div class="empty-foundation">@foundation.Key[0]</div>
+                                <div class="empty-foundation">@GetSuitSymbol(foundation.Key)</div>
                             }
                         </div>
                     }
@@ -79,7 +84,7 @@
     <!-- Tableau -->
     <div class="row">
         <div class="col-md-12">
-            <div class="tableau">
+            <div class="tableau" id="tableauArea">
                 @for (int i = 0; i < Model.Tableau.Count; i++)
                 {
                     <div class="tableau-column drop-target" data-column="@i" data-target="tableau">
@@ -87,25 +92,39 @@
                             var column = Model.Tableau[i];
                             var cardIndex = 0;
                         }
+                        @if (column.Count == 0)
+                        {
+                            <div class="empty-tableau">K</div>
+                        }
                         @foreach (var card in column)
                         {
-                            <div class="card @(card.IsFaceUp ? "front " + card.Suit.ToLower() + " " + card.Color.ToLower() : "back")"
-                            @(card.IsFaceUp ? "draggable='true'" : "")
-                                 data-rank="@card.Rank"
-                                 data-suit="@card.Suit"
-                                 data-color="@card.Color"
-                                 data-column="@i"
-                                 data-index="@cardIndex"
-                                 data-source="tableau">
-                                @if (card.IsFaceUp)
-                                {
+                            if (card.IsFaceUp)
+                            {
+                                <div class="card front draggable @card.Suit.ToLower() @card.Color.ToLower()"
+                                     draggable="true"
+                                     data-rank="@card.Rank"
+                                     data-suit="@card.Suit"
+                                     data-color="@card.Color"
+                                     data-column="@i"
+                                     data-index="@cardIndex"
+                                     data-source="tableau"
+                                     data-faceup="true">
                                     <span class="card-value">@GetRankSymbol(card.Rank)@GetSuitSymbol(card.Suit)</span>
-                                }
-                                else
-                                {
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="card back"
+                                     data-rank="@card.Rank"
+                                     data-suit="@card.Suit"
+                                     data-color="@card.Color"
+                                     data-column="@i"
+                                     data-index="@cardIndex"
+                                     data-source="tableau"
+                                     data-faceup="false">
                                     <span class="card-back-symbol">🂠</span>
-                                }
-                            </div>
+                                </div>
+                            }
                             cardIndex++;
                         }
                     </div>
@@ -117,6 +136,15 @@
 
 @section Styles {
     <style>
+        .container, .card, .card-value, .card-slot,
+        .tableau-column, .foundations, .card-area,
+        .card-back-symbol, .empty-foundation, .empty-tableau {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
         .card-slot {
             width: 100px;
             height: 140px;
@@ -126,83 +154,100 @@
             align-items: center;
             justify-content: center;
             margin: 5px;
-            cursor: pointer;
             transition: all 0.2s;
         }
 
-            .card-slot:hover {
-                border-color: #007bff;
-                background-color: rgba(0, 123, 255, 0.1);
-            }
+        .stock-pile {
+            cursor: pointer;
+        }
 
-            .card-slot.drag-over {
+            .stock-pile:hover {
                 border-color: #28a745;
-                background-color: rgba(40, 167, 69, 0.2);
-                border-width: 3px;
+                background-color: rgba(40, 167, 69, 0.1);
+                transform: scale(1.05);
             }
 
-        /* UPDATED: Card layout with top-aligned content */
+        .empty-slot {
+            font-size: 40px;
+            color: #999;
+            pointer-events: none;
+        }
+
+        .drop-target.drag-over {
+            border-color: #28a745 !important;
+            background-color: rgba(40, 167, 69, 0.3) !important;
+            border-width: 3px !important;
+        }
+
         .card {
             width: 100px;
             height: 140px;
-            border: 1px solid #000;
+            border: 2px solid #333;
             border-radius: 8px;
             display: flex;
-            flex-direction: column; /* UPDATED: Changed to column layout */
-            align-items: flex-start; /* UPDATED: Align to start (top) */
-            justify-content: flex-start; /* UPDATED: Start from top */
-            padding: 5px 8px; /* UPDATED: Added padding */
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: 8px;
             font-size: 24px;
             margin-bottom: -120px;
-            cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s ease;
             position: relative;
             z-index: 1;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
         }
 
-            .card:hover {
-                transform: translateY(-5px);
-                z-index: 10;
+            .card.front.draggable {
+                cursor: grab;
+                background: white;
             }
 
-            .card.selected {
-                box-shadow: 0 0 0 3px yellow;
-                transform: scale(1.05);
-                z-index: 20;
-            }
+                .card.front.draggable:hover {
+                    transform: translateY(-10px);
+                    z-index: 100;
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+                    border-color: #007bff;
+                    border-width: 3px;
+                }
+
+                .card.front.draggable:active {
+                    cursor: grabbing;
+                }
 
             .card.dragging {
                 opacity: 0.5;
-                cursor: move;
+                cursor: grabbing !important;
+                z-index: 1000;
             }
 
             .card.back {
-                background: linear-gradient(45deg, #1a6a1a, #2d8a2d);
+                background: linear-gradient(135deg, #1e5a1e, #2d8a2d);
                 color: white;
-                align-items: center; /* UPDATED: Center for back cards */
-                justify-content: center; /* UPDATED: Center for back cards */
+                align-items: center;
+                justify-content: center;
+                cursor: default;
+                border-color: #1e5a1e;
             }
 
-            .card.front {
-                background: white;
-                box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-                color: black;
-            }
+                .card.back:hover {
+                    transform: none;
+                    box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+                }
 
-        /* UPDATED: Card value positioning at top center */
         .card-value {
-            font-size: 20px; /* UPDATED: Slightly smaller font */
+            font-size: 22px;
             font-weight: bold;
             text-align: center;
-            width: 100%; /* UPDATED: Full width for centering */
-            line-height: 1.2;
+            width: 100%;
+            line-height: 1.3;
+            pointer-events: none;
         }
 
         .card-back-symbol {
-            font-size: 50px; /* UPDATED: Large symbol for back */
+            font-size: 50px;
+            pointer-events: none;
         }
 
-        /* UPDATED: Fixed color classes */
         .card.front.red,
         .card.front.hearts,
         .card.front.diamonds {
@@ -217,319 +262,277 @@
 
         .tableau {
             display: flex;
-            gap: 20px;
+            gap: 15px;
+            padding: 20px 0;
         }
 
         .tableau-column {
-            min-width: 100px;
+            min-width: 110px;
             min-height: 200px;
-            padding-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px dashed transparent;
+            transition: all 0.2s;
         }
-
-            .tableau-column.drag-over {
-                background-color: rgba(40, 167, 69, 0.1);
-                border: 2px dashed #28a745;
-                border-radius: 8px;
-            }
 
         .foundations {
             display: flex;
             gap: 10px;
         }
 
-        .empty-foundation {
-            font-size: 18px;
-            color: #666;
+        .empty-foundation,
+        .empty-tableau {
+            font-size: 32px;
+            color: #aaa;
             font-weight: bold;
+            pointer-events: none;
         }
 
         #gameStatus {
             font-weight: bold;
-            font-size: 18px;
+            font-size: 20px;
         }
     </style>
 }
 
 @section Scripts {
     <script>
-        let selectedCard = null;
-        let selectedWaste = false;
         let draggedCard = null;
 
-        // FIXED: Only reload on successful moves, not on errors
+        function getRankSymbol(rank) {
+            const symbols = { 1: 'A', 11: 'J', 12: 'Q', 13: 'K' };
+            return symbols[rank] || rank.toString();
+        }
+
+        function getSuitSymbol(suit) {
+            const symbols = {
+                'hearts': '♥',
+                'diamonds': '♦',
+                'clubs': '♣',
+                'spades': '♠'
+            };
+            return symbols[suit.toLowerCase()] || suit[0].toUpperCase();
+        }
+
+        // ✅ UPDATE GAME STATE WITHOUT RELOAD
+        function updateGameState(gameState) {
+            console.log('📊 Updating game state:', gameState);
+
+            // Update stock count
+            $('#stockCount').text(gameState.stockCount);
+
+            // Update stock pile
+            $('#stockPile').html(
+                gameState.stockCount > 0
+                    ? '<div class="card back">🂠</div>'
+                    : '<div class="empty-slot">♻️</div>'
+            );
+
+            // Update waste pile
+            $('#wasteArea').empty();
+            if (gameState.waste && gameState.waste.length > 0) {
+                const topCard = gameState.waste[gameState.waste.length - 1];
+                const colorClass = (topCard.suit === 'hearts' || topCard.suit === 'diamonds') ? 'red' : 'black';
+                $('#wasteArea').append(`
+                    <div class="card front ${topCard.suit.toLowerCase()} ${colorClass} waste-card"
+                         draggable="true"
+                         data-rank="${topCard.rank}"
+                         data-suit="${topCard.suit}"
+                         data-color="${topCard.color}"
+                         data-source="waste"
+                         data-faceup="true">
+                        <span class="card-value">${getRankSymbol(topCard.rank)}${getSuitSymbol(topCard.suit)}</span>
+                    </div>
+                `);
+            }
+
+            // Update foundations
+            $('#foundationsArea .foundation').each(function() {
+                const suit = $(this).attr('data-suit');
+                const foundation = gameState.foundations[suit];
+
+                $(this).empty();
+                if (foundation && foundation.length > 0) {
+                    const topCard = foundation[foundation.length - 1];
+                    const colorClass = (topCard.suit === 'hearts' || topCard.suit === 'diamonds') ? 'red' : 'black';
+                    $(this).append(`
+                        <div class="card front ${topCard.suit.toLowerCase()} ${colorClass}"
+                             data-rank="${topCard.rank}"
+                             data-suit="${topCard.suit}"
+                             data-color="${topCard.color}">
+                            <span class="card-value">${getRankSymbol(topCard.rank)}${getSuitSymbol(topCard.suit)}</span>
+                        </div>
+                    `);
+                } else {
+                    $(this).append(`<div class="empty-foundation">${getSuitSymbol(suit)}</div>`);
+                }
+            });
+
+            // Update tableau
+            $('#tableauArea .tableau-column').each(function(colIndex) {
+                const column = gameState.tableau[colIndex];
+                $(this).empty();
+
+                if (!column || column.length === 0) {
+                    $(this).append('<div class="empty-tableau">K</div>');
+                } else {
+                    column.forEach((card, cardIndex) => {
+                        const colorClass = (card.suit === 'hearts' || card.suit === 'diamonds') ? 'red' : 'black';
+                        if (card.isFaceUp) {
+                            $(this).append(`
+                                <div class="card front draggable ${card.suit.toLowerCase()} ${colorClass}"
+                                     draggable="true"
+                                     data-rank="${card.rank}"
+                                     data-suit="${card.suit}"
+                                     data-color="${card.color}"
+                                     data-column="${colIndex}"
+                                     data-index="${cardIndex}"
+                                     data-source="tableau"
+                                     data-faceup="true">
+                                    <span class="card-value">${getRankSymbol(card.rank)}${getSuitSymbol(card.suit)}</span>
+                                </div>
+                            `);
+                        } else {
+                            $(this).append(`
+                                <div class="card back"
+                                     data-rank="${card.rank}"
+                                     data-suit="${card.suit}"
+                                     data-color="${card.color}"
+                                     data-column="${colIndex}"
+                                     data-index="${cardIndex}"
+                                     data-source="tableau"
+                                     data-faceup="false">
+                                    <span class="card-back-symbol">🂠</span>
+                                </div>
+                            `);
+                        }
+                    });
+                }
+            });
+
+            // Check win condition
+            if (gameState.isGameWon) {
+                $('#gameStatus').html('<span class="text-success">🎉 You Won!</span>');
+                setTimeout(() => {
+                    if (confirm('Congratulations! Play again?')) {
+                        $('#newGame').click();
+                    }
+                }, 500);
+            }
+        }
+
+        // ✅ MAKE MOVE WITHOUT RELOAD
         function makeMove(moveData) {
-            console.log('Making move:', moveData);
+            console.log('🎯 Making move:', moveData);
+
             $.ajax({
-                url: '@Url.Action("MakeMove", "Game")',
-                method: 'POST',
+                url: '/Game/MakeMove',
+                type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(moveData),
                 success: function(response) {
-                    console.log('Response:', response);
+                    console.log('📥 Response:', response);
+
                     if (response.success) {
-                        console.log('✅ Move successful, reloading...');
-                        location.reload(); // FIXED: Only reload on success
+                        console.log('✅ Move successful - updating display');
+                        updateGameState(response.gameState);
                     } else {
                         console.log('❌ Move failed:', response.error);
-                        if (!moveData.isAutoMove) {
-                            alert('Invalid move: ' + (response.error || 'Move not allowed'));
-                        }
-                        // FIXED: Don't reload on failure!
+                        alert('Invalid move!');
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('AJAX Error:', status, error);
-                    if (!moveData.isAutoMove) {
-                        alert('Error: Could not complete move');
-                    }
-                    // FIXED: Don't reload on error!
+                    console.error('❌ AJAX Error:', error);
+                    alert('Error making move');
                 }
             });
         }
 
-        function drawFromStock() {
-            console.log('Drawing from stock...');
+        // NEW GAME
+        $('#newGame').click(function() {
+            console.log('🆕 New game');
+            $.post('/Game/NewGame', function(response) {
+                if (response.success) {
+                    location.reload(); // Only reload for new game
+                }
+            });
+        });
+
+        // DRAW CARD
+        $('#drawCard').click(function() {
+            console.log('🎴 Draw card button');
             makeMove({ moveType: 'draw' });
-        }
+        });
 
-        function handleCardClick(cardElement) {
-            const card = $(cardElement);
-
-            if (card.hasClass('back')) {
-                return;
-            }
-
-            $('.card.selected').removeClass('selected');
-            selectedWaste = false;
-
-            if (selectedCard && selectedCard.element === cardElement) {
-                selectedCard = null;
-            } else {
-                card.addClass('selected');
-                selectedCard = {
-                    element: cardElement,
-                    column: parseInt(card.data('column')),
-                    index: parseInt(card.data('index')),
-                    rank: parseInt(card.data('rank')),
-                    suit: card.data('suit'),
-                    source: card.data('source')
-                };
-                console.log('Selected card:', selectedCard);
-            }
-        }
-
-        function selectWaste() {
-            if ($('.waste-card').length === 0) return;
-
-            $('.card.selected').removeClass('selected');
-            $('.waste-card').addClass('selected');
-            selectedCard = null;
-            selectedWaste = true;
-            console.log('Selected waste card');
-        }
-
-        function moveToFoundation(suit) {
-            let moveData = {};
-
-            if (selectedWaste) {
-                moveData = {
-                    moveType: 'waste_to_foundation',
-                    foundationSuit: suit
-                };
-            } else if (selectedCard) {
-                moveData = {
-                    moveType: 'tableau_to_foundation',
-                    foundationSuit: suit,
-                    fromColumn: selectedCard.column,
-                    cardIndex: selectedCard.index
-                };
-            } else {
-                return;
-            }
-
-            makeMove(moveData);
-        }
-
-        function moveToTableau(columnIndex) {
-            let moveData = {};
-
-            if (selectedWaste) {
-                moveData = {
-                    moveType: 'waste_to_tableau',
-                    toColumn: columnIndex
-                };
-            } else if (selectedCard) {
-                if (selectedCard.column === columnIndex) {
-                    return;
-                }
-
-                moveData = {
-                    moveType: 'tableau_to_tableau',
-                    fromColumn: selectedCard.column,
-                    toColumn: columnIndex,
-                    cardIndex: selectedCard.index
-                };
-            } else {
-                return;
-            }
-
-            makeMove(moveData);
-        }
-
-        function handleDoubleClick(cardElement) {
-            const card = $(cardElement);
-
-            if (card.hasClass('back')) {
-                return;
-            }
-
-            console.log('Double-click detected');
-
-            const rank = parseInt(card.data('rank'));
-            const suit = card.data('suit');
-            const source = card.data('source');
-
-            if (source === 'waste') {
-                makeMove({
-                    moveType: 'waste_to_foundation',
-                    foundationSuit: suit,
-                    isAutoMove: true
-                });
-            } else if (source === 'tableau') {
-                const columnIndex = parseInt(card.data('column'));
-                const cardIndex = parseInt(card.data('index'));
-
-                tryMoveToFoundation(columnIndex, cardIndex, suit, rank);
-            }
-        }
-
-        function tryMoveToFoundation(columnIndex, cardIndex, cardSuit, cardRank) {
-            const moveData = {
-                moveType: 'tableau_to_foundation',
-                foundationSuit: cardSuit,
-                fromColumn: columnIndex,
-                cardIndex: cardIndex,
-                isAutoMove: true
-            };
-
-            $.ajax({
-                url: '@Url.Action("MakeMove", "Game")',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(moveData),
-                success: function(response) {
-                    if (response.success) {
-                        location.reload();
-                    } else {
-                        tryMoveToTableau(columnIndex, cardIndex, cardRank, cardSuit);
-                    }
-                }
-            });
-        }
-
-        function tryMoveToTableau(columnIndex, cardIndex, cardRank, cardSuit) {
-            const cardColor = (cardSuit === 'hearts' || cardSuit === 'diamonds') ? 'red' : 'black';
-
-            for (let targetColumn = 0; targetColumn < 7; targetColumn++) {
-                if (targetColumn === columnIndex) continue;
-
-                const targetColumnElement = $(`.tableau-column[data-column="${targetColumn}"]`);
-                const targetCards = targetColumnElement.find('.card.front');
-
-                if (targetCards.length === 0) {
-                    if (cardRank === 13) {
-                        makeTableauMove(columnIndex, targetColumn, cardIndex);
-                        return;
-                    }
-                } else {
-                    const topCard = targetCards.last();
-                    const topRank = parseInt(topCard.data('rank'));
-                    const topSuit = topCard.data('suit');
-                    const topColor = (topSuit === 'hearts' || topSuit === 'diamonds') ? 'red' : 'black';
-
-                    if (topColor !== cardColor && cardRank === topRank - 1) {
-                        makeTableauMove(columnIndex, targetColumn, cardIndex);
-                        return;
-                    }
-                }
-            }
-        }
-
-        function makeTableauMove(fromColumn, toColumn, cardIndex) {
-            makeMove({
-                moveType: 'tableau_to_tableau',
-                fromColumn: fromColumn,
-                toColumn: toColumn,
-                cardIndex: cardIndex,
-                isAutoMove: true
-            });
-        }
+        // STOCK PILE CLICK
+        $('#stockPile').click(function() {
+            console.log('🎴 Stock pile clicked');
+            makeMove({ moveType: 'draw' });
+        });
 
         // ========== DRAG AND DROP ==========
 
-        function handleDragStart(e) {
-            const card = $(e.target);
-
-            if (card.hasClass('back')) {
+        $(document).on('dragstart', '.card[draggable="true"]', function(e) {
+            if ($(this).attr('data-faceup') !== 'true') {
                 e.preventDefault();
-                return;
+                return false;
             }
 
-            card.addClass('dragging');
+            $(this).addClass('dragging');
 
             draggedCard = {
-                element: e.target,
-                rank: parseInt(card.data('rank')),
-                suit: card.data('suit'),
-                color: card.data('color'),
-                source: card.data('source'),
-                column: parseInt(card.data('column')),
-                index: parseInt(card.data('index'))
+                rank: parseInt($(this).attr('data-rank')),
+                suit: $(this).attr('data-suit'),
+                color: $(this).attr('data-color'),
+                source: $(this).attr('data-source'),
+                column: $(this).attr('data-column') ? parseInt($(this).attr('data-column')) : null,
+                index: $(this).attr('data-index') ? parseInt($(this).attr('data-index')) : null
             };
 
-            console.log('Drag started:', draggedCard);
+            console.log('🚀 Dragging:', draggedCard);
 
             e.originalEvent.dataTransfer.effectAllowed = 'move';
-            e.originalEvent.dataTransfer.setData('text/html', e.target.innerHTML);
-        }
+            e.originalEvent.dataTransfer.setData('text/plain', '');
+        });
 
-        function handleDragEnd(e) {
-            $(e.target).removeClass('dragging');
+        $(document).on('dragend', '.card[draggable="true"]', function() {
+            $(this).removeClass('dragging');
             $('.drop-target').removeClass('drag-over');
-        }
+        });
 
-        function handleDragOver(e) {
-            if (e.preventDefault) {
-                e.preventDefault();
-            }
-            e.originalEvent.dataTransfer.dropEffect = 'move';
+        $('.drop-target').on('dragover', function(e) {
+            e.preventDefault();
             return false;
-        }
+        });
 
-        function handleDragEnter(e) {
-            $(e.currentTarget).addClass('drag-over');
-        }
+        $('.drop-target').on('dragenter', function(e) {
+            e.preventDefault();
+            $(this).addClass('drag-over');
+        });
 
-        function handleDragLeave(e) {
-            $(e.currentTarget).removeClass('drag-over');
-        }
+        $('.drop-target').on('dragleave', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.originalEvent.clientX;
+            const y = e.originalEvent.clientY;
 
-        function handleDrop(e) {
-            if (e.stopPropagation) {
-                e.stopPropagation();
+            if (x <= rect.left || x >= rect.right || y <= rect.top || y >= rect.bottom) {
+                $(this).removeClass('drag-over');
             }
+        });
 
-            $(e.currentTarget).removeClass('drag-over');
+        $('.drop-target').on('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            $(this).removeClass('drag-over');
 
             if (!draggedCard) return false;
 
-            const dropTarget = $(e.currentTarget);
-            const targetType = dropTarget.data('target');
-
+            const targetType = $(this).attr('data-target');
             let moveData = {};
 
             if (targetType === 'foundation') {
-                const foundationSuit = dropTarget.data('suit');
+                const foundationSuit = $(this).attr('data-suit');
 
                 if (draggedCard.source === 'waste') {
                     moveData = {
@@ -545,7 +548,7 @@
                     };
                 }
             } else if (targetType === 'tableau') {
-                const targetColumn = parseInt(dropTarget.data('column'));
+                const targetColumn = parseInt($(this).attr('data-column'));
 
                 if (draggedCard.source === 'waste') {
                     moveData = {
@@ -554,7 +557,6 @@
                     };
                 } else if (draggedCard.source === 'tableau') {
                     if (draggedCard.column === targetColumn) {
-                        console.log('Cannot drop on same column');
                         return false;
                     }
 
@@ -568,112 +570,67 @@
             }
 
             if (Object.keys(moveData).length > 0) {
+                console.log('✅ Valid drop');
                 makeMove(moveData);
             }
 
             draggedCard = null;
             return false;
-        }
-
-        // ========== INITIALIZATION ==========
-
-        $(document).ready(function() {
-            console.log('🎮 Initializing Solitaire...');
-
-            $('#newGame').off('click').on('click', function() {
-                console.log('Starting new game...');
-                $.ajax({
-                    url: '@Url.Action("NewGame", "Game")',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({}),
-                    success: function(response) {
-                        if (response.success) {
-                            location.reload();
-                        }
-                    }
-                });
-            });
-
-            $('#drawCard').off('click').on('click', function() {
-                drawFromStock();
-            });
-
-            $('.stock').off('click').on('click', function() {
-                drawFromStock();
-            });
-
-            $('.card.front').off('click').on('click', function(e) {
-                e.stopPropagation();
-                handleCardClick(this);
-            });
-
-            $('.card.front').off('dblclick').on('dblclick', function(e) {
-                e.stopPropagation();
-                handleDoubleClick(this);
-            });
-
-            $('.foundation').off('click').on('click', function(e) {
-                const suit = $(this).data('suit');
-                moveToFoundation(suit);
-            });
-
-            $('.tableau-column').off('click').on('click', function(e) {
-                if ($(e.target).hasClass('tableau-column')) {
-                    const column = parseInt($(this).data('column'));
-                    moveToTableau(column);
-                }
-            });
-
-            $('.card[draggable="true"]').on('dragstart', handleDragStart);
-            $('.card[draggable="true"]').on('dragend', handleDragEnd);
-
-            $('.drop-target').on('dragover', handleDragOver);
-            $('.drop-target').on('dragenter', handleDragEnter);
-            $('.drop-target').on('dragleave', handleDragLeave);
-            $('.drop-target').on('drop', handleDrop);
-
-            $(document).off('keypress').on('keypress', function(e) {
-                if (e.which === 100 || e.which === 68) {
-                    drawFromStock();
-                } else if (e.which === 110 || e.which === 78) {
-                    $('#newGame').click();
-                }
-            });
-
-        @if (Model.IsGameWon)
-        {
-            <text>
-                    $('#gameStatus').html('<span class="text-success">🎉 You Won!</span>');
-                    setTimeout(() => {
-                        if (confirm('Congratulations! Start a new game?')) {
-                            $('#newGame').click();
-                        }
-                    }, 500);
-            </text>
-        }
-
-            console.log('✅ Game ready!');
         });
+
+        // DOUBLE CLICK
+        $(document).on('dblclick', '.card[draggable="true"]', function() {
+            if ($(this).attr('data-faceup') !== 'true') return;
+
+            const suit = $(this).attr('data-suit');
+            const source = $(this).attr('data-source');
+            let moveData = {};
+
+            if (source === 'waste') {
+                moveData = {
+                    moveType: 'waste_to_foundation',
+                    foundationSuit: suit
+                };
+            } else if (source === 'tableau') {
+                moveData = {
+                    moveType: 'tableau_to_foundation',
+                    foundationSuit: suit,
+                    fromColumn: parseInt($(this).attr('data-column')),
+                    cardIndex: parseInt($(this).attr('data-index'))
+                };
+            }
+
+            if (Object.keys(moveData).length > 0) {
+                makeMove(moveData);
+            }
+        });
+
+        console.log('✅ Game ready - no reloads on moves!');
     </script>
 }
 
 @functions {
     private string GetRankSymbol(int rank)
     {
-        var symbols = new Dictionary<int, string>
+        return rank switch
         {
-            {1, "A"}, {11, "J"}, {12, "Q"}, {13, "K"}
+            1 => "A",
+            11 => "J",
+            12 => "Q",
+            13 => "K",
+            _ => rank.ToString()
         };
-        return symbols.ContainsKey(rank) ? symbols[rank] : rank.ToString();
     }
 
     private string GetSuitSymbol(string suit)
     {
-        var symbols = new Dictionary<string, string>
+        return suit.ToLower() switch
         {
-            {"hearts", "♥"}, {"diamonds", "♦"}, {"clubs", "♣"}, {"spades", "♠"}
+            "hearts" => "♥",
+            "diamonds" => "♦",
+            "clubs" => "♣",
+            "spades" => "♠",
+            _ => suit[0].ToString().ToUpper()
         };
-        return symbols.ContainsKey(suit.ToLower()) ? symbols[suit.ToLower()] : suit[0].ToString().ToUpper();
     }
 }

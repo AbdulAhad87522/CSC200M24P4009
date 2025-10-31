@@ -178,14 +178,26 @@ public class GameEngine
     // EXISTING: Move cards within tableau (drag multiple cards)
     public bool MoveWithinTableau(int fromColumn, int toColumn, int cardIndex)
     {
+        Console.WriteLine($"🎯 MoveWithinTableau called: from={fromColumn}, to={toColumn}, index={cardIndex}");
+
         if (fromColumn < 0 || fromColumn >= Tableau.Count ||
             toColumn < 0 || toColumn >= Tableau.Count)
+        {
+            Console.WriteLine($"❌ Invalid column indices");
             return false;
+        }
 
-        if (fromColumn == toColumn) return false; // ADDED: Can't move to same column
+        if (fromColumn == toColumn)
+        {
+            Console.WriteLine($"❌ Cannot move to same column");
+            return false;
+        }
 
         var sourceColumn = Tableau[fromColumn];
         var targetColumn = Tableau[toColumn];
+
+        Console.WriteLine($"   Source column length: {sourceColumn.Length}");
+        Console.WriteLine($"   Target column length: {targetColumn.Length}");
 
         var node = sourceColumn.head;
         for (int i = 0; i < cardIndex && node != null; i++)
@@ -193,31 +205,59 @@ public class GameEngine
             node = node.Next;
         }
 
-        if (node == null || !node.Data.IsFaceUp)
+        if (node == null)
+        {
+            Console.WriteLine($"❌ Card not found at index {cardIndex}");
             return false;
+        }
+
+        if (!node.Data.IsFaceUp)
+        {
+            Console.WriteLine($"❌ Card is face down");
+            return false;
+        }
 
         var cardToMove = node.Data;
+        Console.WriteLine($"   Moving card: {cardToMove.Rank} of {cardToMove.Suit} ({cardToMove.Color})");
 
         if (targetColumn.IsEmpty())
         {
-            if (cardToMove.Rank == 13) // Only Kings on empty columns
+            Console.WriteLine($"   Target column is empty");
+            if (cardToMove.Rank == 13)
             {
+                Console.WriteLine($"✅ King can move to empty column");
                 MoveCards(sourceColumn, targetColumn, cardIndex);
                 return true;
+            }
+            else
+            {
+                Console.WriteLine($"❌ Only Kings can move to empty columns");
+                return false;
             }
         }
         else
         {
             var targetTopCard = targetColumn.tail.Data;
-            if (IsOppositeColor(cardToMove, targetTopCard) &&
-                cardToMove.Rank == targetTopCard.Rank - 1)
+            Console.WriteLine($"   Target top card: {targetTopCard.Rank} of {targetTopCard.Suit} ({targetTopCard.Color})");
+
+            bool oppositeColor = IsOppositeColor(cardToMove, targetTopCard);
+            bool descendingRank = cardToMove.Rank == targetTopCard.Rank - 1;
+
+            Console.WriteLine($"   Opposite colors? {oppositeColor}");
+            Console.WriteLine($"   Descending rank? {descendingRank} ({cardToMove.Rank} == {targetTopCard.Rank} - 1)");
+
+            if (oppositeColor && descendingRank)
             {
+                Console.WriteLine($"✅ Valid move!");
                 MoveCards(sourceColumn, targetColumn, cardIndex);
                 return true;
             }
+            else
+            {
+                Console.WriteLine($"❌ Invalid move - colors or ranks don't match");
+                return false;
+            }
         }
-
-        return false;
     }
 
     // UPDATED: Move cards helper with null checks

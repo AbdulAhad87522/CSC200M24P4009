@@ -3,20 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\models\\models\\gameengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\models\\models\\gameengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\views\\game\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\views\\game\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\models\\models\\gameengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\models\\models\\gameengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\models\\models\\gameviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\models\\models\\gameviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\models\\models\\deck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\models\\models\\deck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\models\\models\\cards.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\models\\models\\cards.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\models\\datastructures\\linkedlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -31,24 +47,8 @@
       "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\models\\datastructures\\customerqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\models\\models\\cards.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\models\\models\\cards.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\controllers\\testcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\controllers\\testcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\models\\models\\gameviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\models\\models\\gameviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\models\\models\\deck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\models\\models\\deck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\views\\test\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -86,7 +86,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -106,94 +106,103 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "GameController.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Controllers\\GameController.cs",
-              "RelativeDocumentMoniker": "Solitaire\\Controllers\\GameController.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Controllers\\GameController.cs",
-              "RelativeToolTip": "Solitaire\\Controllers\\GameController.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAASwB4AAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-23T16:19:14.841Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "linkedlist.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\datastructures\\linkedlist.cs",
-              "RelativeDocumentMoniker": "Solitaire\\Models\\datastructures\\linkedlist.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\datastructures\\linkedlist.cs",
-              "RelativeToolTip": "Solitaire\\Models\\datastructures\\linkedlist.cs",
-              "ViewState": "AgIAAEsAAAAAAAAAAAAAwFwAAAANAAAAAAAAAA==",
+              "Title": "GameEngine.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\GameEngine.cs",
+              "RelativeDocumentMoniker": "Solitaire\\Models\\models\\GameEngine.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\GameEngine.cs",
+              "RelativeToolTip": "Solitaire\\Models\\models\\GameEngine.cs",
+              "ViewState": "AgIAAI0BAAAAAAAAAAAYwLABAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-27T04:56:50.677Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-27T16:23:58.049Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "customstack.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\datastructures\\customstack.cs",
-              "RelativeDocumentMoniker": "Solitaire\\Models\\datastructures\\customstack.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\datastructures\\customstack.cs",
-              "RelativeToolTip": "Solitaire\\Models\\datastructures\\customstack.cs",
-              "ViewState": "AgIAADkAAAAAAAAAAAAYwFwAAAABAAAAAAAAAA==",
+              "Title": "GameViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\GameViewModel.cs",
+              "RelativeDocumentMoniker": "Solitaire\\Models\\models\\GameViewModel.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\GameViewModel.cs",
+              "RelativeToolTip": "Solitaire\\Models\\models\\GameViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-27T04:56:36.498Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-27T16:43:40.257Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "Solitaire\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "Solitaire\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAADAAAAAAAAAAAAAAAEAAAAA1AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-27T16:05:11.91Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "GameEngine.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\GameEngine.cs",
-              "RelativeDocumentMoniker": "Solitaire\\Models\\models\\GameEngine.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\GameEngine.cs*",
-              "RelativeToolTip": "Solitaire\\Models\\models\\GameEngine.cs*",
-              "ViewState": "AgIAAGMBAAAAAAAAAAAiwIgBAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-27T16:23:58.049Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Views\\Game\\Index.cshtml",
               "RelativeDocumentMoniker": "Solitaire\\Views\\Game\\Index.cshtml",
-              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Views\\Game\\Index.cshtml",
-              "RelativeToolTip": "Solitaire\\Views\\Game\\Index.cshtml",
-              "ViewState": "AgIAAIMCAAAAAAAAAAAYwKYCAAABAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Views\\Game\\Index.cshtml*",
+              "RelativeToolTip": "Solitaire\\Views\\Game\\Index.cshtml*",
+              "ViewState": "AgIAAHsCAAAAAAAAAAAAAHsCAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-10-23T16:19:54.738Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "customerqueue.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\datastructures\\customerqueue.cs",
-              "RelativeDocumentMoniker": "Solitaire\\Models\\datastructures\\customerqueue.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\datastructures\\customerqueue.cs",
-              "RelativeToolTip": "Solitaire\\Models\\datastructures\\customerqueue.cs",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAgwF0AAAABAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "GameController.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Controllers\\GameController.cs",
+              "RelativeDocumentMoniker": "Solitaire\\Controllers\\GameController.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Controllers\\GameController.cs",
+              "RelativeToolTip": "Solitaire\\Controllers\\GameController.cs",
+              "ViewState": "AgIAAMQAAAAAAAAAAAA+wMcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-27T04:57:26.802Z",
+              "WhenOpened": "2025-10-23T16:19:14.841Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Program.cs",
+              "RelativeDocumentMoniker": "Solitaire\\Program.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Program.cs",
+              "RelativeToolTip": "Solitaire\\Program.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAYwBMAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T16:20:21.63Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "linkedlist.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\datastructures\\linkedlist.cs",
+              "RelativeDocumentMoniker": "Solitaire\\Models\\datastructures\\linkedlist.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\datastructures\\linkedlist.cs",
+              "RelativeToolTip": "Solitaire\\Models\\datastructures\\linkedlist.cs",
+              "ViewState": "AgIAAKsAAAAAAAAAAAAiwNAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T04:56:50.677Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Solitaire\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Solitaire\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAACYAAAAAAAAAAAAYwEkAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-27T16:05:11.91Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Deck.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\Deck.cs",
+              "RelativeDocumentMoniker": "Solitaire\\Models\\models\\Deck.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\Deck.cs",
+              "RelativeToolTip": "Solitaire\\Models\\models\\Deck.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAUwEIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T16:23:19.331Z"
             },
             {
               "$type": "Document",
@@ -203,14 +212,37 @@
               "RelativeDocumentMoniker": "Solitaire\\Models\\models\\cards.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\cards.cs",
               "RelativeToolTip": "Solitaire\\Models\\models\\cards.cs",
-              "ViewState": "AgIAAJIAAAAAAAAAAAAAwKcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAIsAAAAAAAAAAAAwwKwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-27T16:21:44.114Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-27T16:21:44.114Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
+              "Title": "customstack.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\datastructures\\customstack.cs",
+              "RelativeDocumentMoniker": "Solitaire\\Models\\datastructures\\customstack.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\datastructures\\customstack.cs",
+              "RelativeToolTip": "Solitaire\\Models\\datastructures\\customstack.cs",
+              "ViewState": "AgIAADsAAAAAAAAAAADwv1wAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T04:56:36.498Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "customerqueue.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\datastructures\\customerqueue.cs",
+              "RelativeDocumentMoniker": "Solitaire\\Models\\datastructures\\customerqueue.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\datastructures\\customerqueue.cs",
+              "RelativeToolTip": "Solitaire\\Models\\datastructures\\customerqueue.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAADwv10AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T04:57:26.802Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "TestController.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Controllers\\TestController.cs",
               "RelativeDocumentMoniker": "Solitaire\\Controllers\\TestController.cs",
@@ -218,47 +250,7 @@
               "RelativeToolTip": "Solitaire\\Controllers\\TestController.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAAAwwB0AAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-27T16:27:35.879Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "GameViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\GameViewModel.cs",
-              "RelativeDocumentMoniker": "Solitaire\\Models\\models\\GameViewModel.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\GameViewModel.cs",
-              "RelativeToolTip": "Solitaire\\Models\\models\\GameViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-27T16:43:40.257Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Program.cs",
-              "RelativeDocumentMoniker": "Solitaire\\Program.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Program.cs",
-              "RelativeToolTip": "Solitaire\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-23T16:20:21.63Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Deck.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\Deck.cs",
-              "RelativeDocumentMoniker": "Solitaire\\Models\\models\\Deck.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\Deck.cs",
-              "RelativeToolTip": "Solitaire\\Models\\models\\Deck.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAUwEIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-27T16:23:19.331Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-27T16:27:35.879Z"
             },
             {
               "$type": "Document",
