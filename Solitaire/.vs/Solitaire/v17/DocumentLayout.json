@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\views\\game\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\views\\game\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|solutionrelative:solitaire\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B02D6270-58FE-4922-B9E6-338865975AF1}|Solitaire\\Solitaire.csproj|c:\\users\\user\\desktop\\csc200m24p4009\\solitaire\\solitaire\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -86,7 +86,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -130,28 +130,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Views\\Game\\Index.cshtml",
               "RelativeDocumentMoniker": "Solitaire\\Views\\Game\\Index.cshtml",
               "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Views\\Game\\Index.cshtml",
               "RelativeToolTip": "Solitaire\\Views\\Game\\Index.cshtml",
-              "ViewState": "AgIAAFYCAAAAAAAAAAAiwG0CAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAAFYCAAAAAAAAAAAiwHsCAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-23T16:19:54.738Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-23T16:19:54.738Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "GameController.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Controllers\\GameController.cs",
               "RelativeDocumentMoniker": "Solitaire\\Controllers\\GameController.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Controllers\\GameController.cs",
               "RelativeToolTip": "Solitaire\\Controllers\\GameController.cs",
-              "ViewState": "AgIAAMQAAAAAAAAAAAA+wMcAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAMEAAAAAAAAAAAAcwN0AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-23T16:19:14.841Z"
+              "WhenOpened": "2025-10-23T16:19:14.841Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -179,7 +179,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "Solitaire\\Views\\Shared\\_Layout.cshtml",

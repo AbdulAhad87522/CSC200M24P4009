@@ -161,31 +161,64 @@ namespace Solitaire.Controllers
         }
 
         // ✅ NEW: Helper method to read stack without destroying it
+        //private List<Card>  GetStackAsList(CustomStack<Card> stack)
+        //{
+        //    var result = new List<Card>();
+        //    var tempList = new List<Card>();
+
+        //    // Pop all cards into temp list
+        //    while (!stack.IsEmpty())
+        //    {
+        //        tempList.Add(stack.Pop());
+        //    }
+
+        //    // Reverse to get correct order (bottom to top)
+        //    tempList.Reverse();
+
+        //    // Push back onto stack to restore it
+        //    foreach (var card in tempList)
+        //    {
+        //        stack.Push(card);
+        //    }
+
+        //    // Return the list in correct order
+        //    result = new List<Card>(tempList);
+        //    result.Reverse(); // Show top card last in list
+
+        //    return result;
+        //}
+
+        // ✅ FIXED: Helper method to read stack without destroying it or messing up order
+        // ✅ FIXED: Helper method to read stack without destroying it
         private List<Card> GetStackAsList(CustomStack<Card> stack)
         {
             var result = new List<Card>();
-            var tempList = new List<Card>();
 
-            // Pop all cards into temp list
+            if (stack.IsEmpty())
+                return result;
+
+            // Use a temporary stack to preserve order
+            var tempStack = new CustomStack<Card>();
+            var cardsList = new List<Card>();
+
+            // First pass: pop from original to temporary (reverses order)
             while (!stack.IsEmpty())
             {
-                tempList.Add(stack.Pop());
+                var card = stack.Pop();
+                cardsList.Add(card);
+                tempStack.Push(card);
             }
 
-            // Reverse to get correct order (bottom to top)
-            tempList.Reverse();
-
-            // Push back onto stack to restore it
-            foreach (var card in tempList)
+            // Second pass: pop from temporary back to original (restores original order)
+            while (!tempStack.IsEmpty())
             {
-                stack.Push(card);
+                stack.Push(tempStack.Pop());
             }
 
-            // Return the list in correct order
-            result = new List<Card>(tempList);
-            result.Reverse(); // Show top card last in list
+            // The cardsList is now in reverse order (top card first), so reverse it
+            cardsList.Reverse();
 
-            return result;
+            return cardsList;
         }
     }
 
