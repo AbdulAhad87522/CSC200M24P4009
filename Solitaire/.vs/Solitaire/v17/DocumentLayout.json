@@ -112,7 +112,7 @@
               "RelativeDocumentMoniker": "Solitaire\\Models\\models\\GameViewModel.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\CSC200M24P4009\\Solitaire\\Solitaire\\Models\\models\\GameViewModel.cs",
               "RelativeToolTip": "Solitaire\\Models\\models\\GameViewModel.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAxwBQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-27T16:43:40.257Z",
               "EditorCaption": ""
@@ -127,8 +127,7 @@
               "RelativeToolTip": "Solitaire\\Views\\Game\\Index.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFACAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-23T16:19:54.738Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-23T16:19:54.738Z"
             },
             {
               "$type": "Document",
@@ -140,8 +139,7 @@
               "RelativeToolTip": "Solitaire\\Controllers\\GameController.cs",
               "ViewState": "AgIAANkAAAAAAAAAAAAIwHUAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-23T16:19:14.841Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-23T16:19:14.841Z"
             },
             {
               "$type": "Document",
@@ -189,8 +187,7 @@
               "RelativeToolTip": "Solitaire\\Models\\models\\cards.cs",
               "ViewState": "AgIAAKwAAAAAAAAAAAAAAKwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-27T16:21:44.114Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-27T16:21:44.114Z"
             },
             {
               "$type": "Document",
