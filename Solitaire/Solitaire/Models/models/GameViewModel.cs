@@ -18,3 +18,4 @@
         public int CardIndex { get; set; }
     }
 }
+        
